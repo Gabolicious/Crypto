@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Cryptography - Caesar</title>
+    <script src="../jquery.js"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="http://www.gabobabo.xyz">Home</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Ciphers
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="../index.html">Home</a>
+                        <a class="dropdown-item" href="../caesar/">Caesar Cipher</a>
+                        <a class="dropdown-item" href="../affine/">Affine Cipher</a>
+                        <a class="dropdown-item" href="../codeword/">Codeword Cipher</a>
+
+                        <a class="dropdown-item" href="../vigenere/">Vigenère Cipher</a>
+                        <a class="dropdown-item" href="../playfair/">Playfair Cipher</a>
+                        <a class="dropdown-item" href="../hill2/">Hill 2x2 Cipher</a>
+                        <a class="dropdown-item" href="../hill3/">Hill 3x3 Cipher</a>
+                        <a class="dropdown-item" href="../rsa/">RSA Cipher</a>
+
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Other Pages
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="http://www.gabobabo.xyz/Cleanify">Cleanify</a>
+                        <a class="dropdown-item" href="http://www.gabobabo.xyz/Drivify/">Drivify</a>
+                        <a class="dropdown-item" href="http://www.gabobabo.xyz/names/">Names</a>
+                    </div>
+                </li>
+
+            </ul>
+            <span class="navbar-text">
+                Caesar Cipher
+            </span>
+        </div>
+    </nav>
+
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">Caesar Cipher</h1>
+            <p class="lead">Takes the values of each character and adds a certain key (modulo 26). A = 0</br>
+                <code>Encrypt = [<var>Character code</var> + <var>step</var>] mod 26</code></br>
+                <code>Decrypt = [<var>Character code</var> - <var>step</var>] mod 26</code>
+            </p>
+        </div>
+    </div>
+    <div class="container-fluid">
+
+        <div class="card-deck">
+            <div class="card text-white bg-secondary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title" id="left-box-status">Plain Text</h5>
+                    <textarea spellcheck="false" oninput="UpdateCipher()" id="left-box-text" class="card-text"
+                        style="width:100%;height:200px;"></textarea>
+
+                </div>
+                <a class="btn btn-primary" onclick="CopyFunction('left-box-text')">Copy text</a>
+
+            </div>
+            <div class="card text-center text-white bg-info mb-3">
+                <div class="btn-group btn-group-toggle card-title" data-toggle="buttons">
+                    <label class="btn btn-secondary active" onclick="BeginEncrypt()">
+                        <input type="radio" name="options" id="option1" autocomplete="off"> Encrypt
+                    </label>
+                    <label class="btn btn-secondary" onclick="BeginDecrypt()">
+                        <input type="radio" name="options" id="option2" autocomplete="off"> Decrypt
+                    </label>
+                </div>
+                <div class="card-body d-flex justify-content-center align-items-center">
+
+                    <div class="card-text">
+                        <label for="step-value" class="col-form-label">Step:</label>
+                        <input class="form-control" type="number" max="26" min="0" oninput="UpdateCipher()"
+                            id="step-value" value="1">
+
+                    </div>
+
+                </div>
+                <a onclick="Hack()" class="btn btn-primary">Hack</a>
+
+            </div>
+            <div class="card text-right text-white bg-secondary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title" id="right-box-status">Cipher Text</h5>
+                    <textarea spellcheck="false" id="right-box-text" class="card-text"
+                        style="height:200px;width:100%;"></textarea>
+
+                </div>
+                <a class="btn btn-primary" onclick="CopyFunction('right-box-text')">Copy text</a>
+
+            </div>
+        </div>
+        <div class="table-responsive" id="table-hack">
+
+        </div>
+    </div>
+</body>
+<script>
+        function mod(n, m) {
+        return ((n % m) + m) % m;
+    }
+    let Encrypting = true;
+    let Dictionary;
+    $.getJSON("../dictionary.json", (data, textStatus, XHR) => {
+        Dictionary = data
+    })
+
+    function Hack() {
+        let CipherText
+        if (Encrypting) CipherText = document.getElementById("right-box-text").value;
+        else CipherText = document.getElementById("left-box-text").value;
+        if (!CipherText) return;
+        document.getElementById("table-hack").innerHTML = ""
+
+        const table = document.createElement("TABLE")
+        table.className = "table table-hover table-sm"
+
+        const tbody = document.createElement("tbody")
+
+        for (let i = 1; i <= 26; i++) {
+            const tr2 = document.createElement("tr")
+            tr2.className = "table-danger"
+
+            const th3 = document.createElement("th")
+            th3.scope = "row";
+            th3.innerHTML = i;
+            tr2.appendChild(th3)
+
+            const td = document.createElement("td")
+            for (let j = 0; j < CipherText.length; j++) {
+                td.innerHTML += DeCipher(CipherText[j], i)
+            }
+
+            const words = td.innerHTML.split(" ")
+            let points = 0;
+
+            for (let j = 0; j < words.length; j++) {
+                if (Dictionary[words[j].toLowerCase()]) {
+                    points++;
+                }
+            }
+            if (points == words.length) tr2.className = "table-success"
+            else if (points > 1) tr2.className = "table-warning"
+            tr2.appendChild(td)
+            tbody.appendChild(tr2)
+        }
+        table.appendChild(tbody)
+
+        document.getElementById("table-hack").appendChild(table)
+    }
+
+    function CopyFunction(ID) {
+        /* Get the text field */
+        var copyText = document.getElementById(ID);
+
+        /* Select the text field */
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+        /* Copy the text inside the text field */
+        document.execCommand("copy");
+    }
+    UpdateCipher();
+
+    function BeginEncrypt() {
+        if (Encrypting) return;
+        Encrypting = true;
+        document.getElementById("left-box-status").innerHTML = "Plain Text"
+        document.getElementById("right-box-status").innerHTML = "Cipher Text"
+        document.getElementById("left-box-text").value = document.getElementById("right-box-text").value
+
+        UpdateCipher();
+    }
+
+    function BeginDecrypt() {
+        if (!Encrypting) return;
+        Encrypting = false;
+        document.getElementById("left-box-status").innerHTML = "Cipher Text"
+        document.getElementById("right-box-status").innerHTML = "Plain Text"
+        document.getElementById("left-box-text").value = document.getElementById("right-box-text").value
+
+        UpdateCipher();
+    }
+
+    function Cipher(character, step) {
+        if (!character.match(/[a-z]/i)) return character;
+        const CharCode = character.charCodeAt(0);
+        const Start = (character == character.toUpperCase()) ? "A".charCodeAt(0) : "a".charCodeAt(0);
+        return String.fromCharCode((((CharCode + step) - Start) % 26) + Start)
+    }
+
+    function DeCipher(character, step) {
+        if (!character.match(/[a-z]/i)) return character;
+        const CharCode = character.charCodeAt(0);
+        const Start = (character == character.toUpperCase()) ? "A".charCodeAt(0) : "a".charCodeAt(0);
+        let AdjustedChar = CharCode - step;
+        if (AdjustedChar < Start) {
+            AdjustedChar += 26
+        }
+        return String.fromCharCode(AdjustedChar)
+    }
+
+    function UpdateCipher() {
+        const step = mod(parseInt(document.getElementById("step-value").value), 26)
+        if (step > 26 || step < 0) return RightTextBox.value = "ERROR: Invalid step value";
+        const LeftText = document.getElementById("left-box-text").value
+        const RightTextBox = document.getElementById("right-box-text")
+        RightTextBox.value = "";
+        if (Encrypting) {
+            for (let i = 0; i < LeftText.length; i++) {
+                RightTextBox.value += Cipher(LeftText[i], step)
+            }
+        } else {
+            for (let i = 0; i < LeftText.length; i++) {
+                RightTextBox.value += DeCipher(LeftText[i], step)
+            }
+        }
+
+        document.getElementById("table-hack").innerHTML = ""
+    }
+</script>
+
+</html>
