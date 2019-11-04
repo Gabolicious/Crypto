@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Cryptography</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
+
+</head>
+
+<body>
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="../index.html">Home</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Ciphers
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="../index.html">Home</a>
+
+                        <a class="dropdown-item" href="./caesar/index.html">Caesar Cipher</a>
+                        <a class="dropdown-item" href="./affine/index.html">Affine Cipher</a>
+                        <a class="dropdown-item" href="./codeword/index.html">Codeword Cipher</a>
+                        <a class="dropdown-item" href="./vigenere/index.html">Vigenère Cipher</a>
+                        <a class="dropdown-item" href="./playfair/index.html">Playfair Cipher</a>
+                        <a class="dropdown-item" href="./hill2/index.html">Hill 2x2 Cipher</a>
+                        <a class="dropdown-item" href="./hill3/index.html">Hill 3x3 Cipher</a>
+                    <!--<a class="dropdown-item" href="./rsa/">RSA Cipher</a>-->
+
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Other Pages
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="../Drivify/index.html">Drivify</a>
+                        <a class="dropdown-item" href="../names/index.html">Names</a>
+                        <a class="dropdown-item" href="../Cleanify/index.html">Cleanify</a>
+                    </div>
+                </li>
+
+            </ul>
+            <span class="navbar-text">
+                Home Page
+            </span>
+        </div>
+    </nav>
+        <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">Cryptography</h1>
+            <p class="lead"></br>
+                This website combines all 8 ciphers taught in Ms. Neely's Cryptography class into a simple to use encrypter and decrypter. 
+            </p>
+            <hr class="my-4">
+            <p>
+                Each page has a short description about what the cipher is and how it works. If it has an equation it'll be listed as well. </br>
+                You can type your message into the left box, select encrypt or decyprt then input your variables, and then copy the encrypted or decrypted message from the right box.
+            </p>
+            <p class="lead">
+                <a class="btn btn-primary btn-lg" target="_blank" href="https://github.com/Gabolicious/Crypto" role="button">Source Code</a>
+              </p>    
+        </div>
+    </div>
+    <a href="./caesar" class="btn btn-primary btn-lg btn-block">Caesar Cipher</a>
+    <a href="./affine" class="btn btn-secondary btn-lg btn-block">Affine Cipher</a>
+    <a href="./codeword/" class="btn btn-success btn-lg btn-block">Codeword Cipher</a>
+    <a href="./vigenere/" class="btn btn-danger btn-lg btn-block">Vigenère Cipher</a>
+    <a href="./playfair/" class="btn btn-warning btn-lg btn-block">Playfair Cipher</a>
+    <a href="./hill2/" class="btn btn-info btn-lg btn-block">Hill 2x2 Cipher</a>
+    <a href="./hill3/" class="btn btn-light btn-lg btn-block">Hill 3x3 Cipher</a>
+    <a href="./rsa/" class="btn btn-dark btn-lg btn-block">RSA Cipher</a>
+
+</body>
+<script>
+
+</script>
+
+</html>
