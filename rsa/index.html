@@ -2,27 +2,26 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Cryptography</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Cryptography - RSA</title>
+    <script src="../jquery.js"></script>
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
-    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
     </script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
     </script>
-
+    <script src="https://peterolson.github.io/BigInteger.js/BigInteger.min.js"></script>
+    <link rel="stylesheet" href="./main.css">
 </head>
 
 <body>
     <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="../index.html">Home</a>
+        <a class="navbar-brand" href="http://www.gabobabo.xyz">Home</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
             aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -36,15 +35,15 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="../index.html">Home</a>
+                        <a class="dropdown-item" href="../caesar/">Caesar Cipher</a>
+                        <a class="dropdown-item" href="../affine/">Affine Cipher</a>
+                        <a class="dropdown-item" href="../codeword/">Codeword Cipher</a>
 
-                        <a class="dropdown-item" href="./caesar/index.html">Caesar Cipher</a>
-                        <a class="dropdown-item" href="./affine/index.html">Affine Cipher</a>
-                        <a class="dropdown-item" href="./codeword/index.html">Codeword Cipher</a>
-                        <a class="dropdown-item" href="./vigenere/index.html">Vigenère Cipher</a>
-                        <a class="dropdown-item" href="./playfair/index.html">Playfair Cipher</a>
-                        <a class="dropdown-item" href="./hill2/index.html">Hill 2x2 Cipher</a>
-                        <a class="dropdown-item" href="./hill3/index.html">Hill 3x3 Cipher</a>
-                    <!--<a class="dropdown-item" href="./rsa/">RSA Cipher</a>-->
+                        <a class="dropdown-item" href="../vigenere/">Vigenère Cipher</a>
+                        <a class="dropdown-item" href="../playfair/">Playfair Cipher</a>
+                        <a class="dropdown-item" href="../hill2/">Hill 2x2 Cipher</a>
+                        <a class="dropdown-item" href="../hill3/">Hill 3x3 Cipher</a>
+                        <a class="dropdown-item" href="../rsa/">RSA Cipher</a>
 
                     </div>
                 </li>
@@ -54,46 +53,316 @@
                         Other Pages
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="../Drivify/index.html">Drivify</a>
-                        <a class="dropdown-item" href="../names/index.html">Names</a>
-                        <a class="dropdown-item" href="../Cleanify/index.html">Cleanify</a>
+                        <a class="dropdown-item" href="http://www.gabobabo.xyz/Cleanify">Cleanify</a>
+                        <a class="dropdown-item" href="http://www.gabobabo.xyz/Drivify/">Drivify</a>
+                        <a class="dropdown-item" href="http://www.gabobabo.xyz/names/">Names</a>
                     </div>
                 </li>
 
             </ul>
             <span class="navbar-text">
-                Home Page
+                RSA Cipher
             </span>
         </div>
     </nav>
-        <div class="jumbotron jumbotron-fluid">
+
+    <div class="jumbotron jumbotron-fluid">
         <div class="container">
-            <h1 class="display-4">Cryptography</h1>
-            <p class="lead"></br>
-                This website combines all 8 ciphers taught in Ms. Neely's Cryptography class into a simple to use encrypter and decrypter. 
+            <h1 class="display-4">RSA Cipher</h1>
+            <p class="lead">A public key cipher. It's recommended to clear the cipher text box to change p and q values
+                for decryption, unless you like for things to be slow.
+            </br>
+            <code>Encrypt = [<var>Character numbers</var>^<var>e</var>] mod <var>n</var></code></br>
+            <code>Decrypt = [<var>Code</var>^<var>d</var>] mod <var>n</var></code></br>
             </p>
-            <hr class="my-4">
-            <p>
-                Each page has a short description about what the cipher is and how it works. If it has an equation it'll be listed as well. </br>
-                You can type your message into the left box, select encrypt or decyprt then input your variables, and then copy the encrypted or decrypted message from the right box.
-            </p>
-            <p class="lead">
-                <a class="btn btn-primary btn-lg" target="_blank" href="https://github.com/Gabolicious/Crypto" role="button">Source Code</a>
-              </p>    
         </div>
     </div>
-    <a href="./caesar" class="btn btn-primary btn-lg btn-block">Caesar Cipher</a>
-    <a href="./affine" class="btn btn-secondary btn-lg btn-block">Affine Cipher</a>
-    <a href="./codeword/" class="btn btn-success btn-lg btn-block">Codeword Cipher</a>
-    <a href="./vigenere/" class="btn btn-danger btn-lg btn-block">Vigenère Cipher</a>
-    <a href="./playfair/" class="btn btn-warning btn-lg btn-block">Playfair Cipher</a>
-    <a href="./hill2/" class="btn btn-info btn-lg btn-block">Hill 2x2 Cipher</a>
-    <a href="./hill3/" class="btn btn-light btn-lg btn-block">Hill 3x3 Cipher</a>
-    <a href="./rsa/" class="btn btn-dark btn-lg btn-block">RSA Cipher</a>
+    <div class="container-fluid">
+        <div class="card-deck">
+            <div class="card text-white bg-secondary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title" id="left-box-status">Plain Text</h5>
+                    <textarea spellcheck="false" oninput="UpdateCipher()" id="left-box-text" class="card-text"
+                        style="width:100%;height:200px;"></textarea>
 
+                </div>
+                <a class="btn btn-primary" onclick="CopyFunction('left-box-text')">Copy text</a>
+
+            </div>
+            <div class="card text-center text-white bg-info mb-3">
+                <div class="btn-group btn-group-toggle card-title" data-toggle="buttons">
+                    <label class="btn btn-secondary active" onclick="BeginEncrypt()">
+                        <input type="radio" name="options" id="option1" autocomplete="off"> Encrypt
+                    </label>
+                    <label class="btn btn-secondary" onclick="BeginDecrypt()">
+                        <input type="radio" name="options" id="option2" autocomplete="off"> Decrypt
+                    </label>
+                </div>
+                <div class="card-body d-flex justify-content-center align-items-center" id="cipher-variables">
+
+                    <div class="card-text">
+                        <label for="e-value" class="col-form-label">e:</label>
+                        <input class="form-control" type="number" min="1" oninput="UpdateCipher()" id="e-value" step="1"
+                            value="911">
+
+                        <label for="n-value" class="col-form-label">n:</label>
+                        <input class="form-control" type="number" min="1" oninput="UpdateCipher()" id="n-value" step="1"
+                            value="17989001">
+
+                    </div>
+
+                </div>
+                <button onclick="Hack()" class="btn btn-primary disabled">Hack</button>
+
+            </div>
+            <div class="card text-right text-white bg-secondary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title" id="right-box-status">Cipher Text</h5>
+                    <textarea spellcheck="false" oninput="UpdateCipherReversed()" id="right-box-text" class="card-text"
+                        style="height:200px;width:100%;"></textarea>
+
+                </div>
+                <a class="btn btn-primary" onclick="CopyFunction('right-box-text')">Copy text</a>
+
+            </div>
+        </div>
+    </div>
 </body>
 <script>
+    const LetterNums = {
+        "a": "01",
+        "b": "02",
+        "c": "03",
+        "d": "04",
+        "e": "05",
+        "f": "06",
+        "g": "07",
+        "h": "08",
+        "i": "09",
+        "j": "10",
+        "k": "11",
+        "l": "12",
+        "m": "13",
+        "n": "14",
+        "o": "15",
+        "p": "16",
+        "q": "17",
+        "r": "18",
+        "s": "19",
+        "t": "20",
+        "u": "21",
+        "v": "22",
+        "w": "23",
+        "x": "24",
+        "y": "25",
+        "z": "26"
+    }
 
+
+    function mod(n, m) {
+        return ((n % m) + m) % m;
+    }
+    let Encrypting = true;
+    let Dictionary;
+    UpdateCipher();
+
+    $.getJSON("../dictionary.json", (data, textStatus, XHR) => {
+        Dictionary = data
+    })
+
+    function Hack() {
+
+    }
+
+    function CopyFunction(ID) {
+        /* Get the text field */
+        var copyText = document.getElementById(ID);
+
+        /* Select the text field */
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+        /* Copy the text inside the text field */
+        document.execCommand("copy");
+    }
+    const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", 'I', 'J', 'K', 'L', 'M', 'N', 'O',
+        'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+    ]
+
+    function BeginEncrypt() {
+        if (Encrypting) return;
+        Encrypting = true;
+        document.getElementById("left-box-status").innerHTML = "Plain Text"
+        document.getElementById("right-box-status").innerHTML = "Cipher Text"
+        document.getElementById("left-box-text").value = document.getElementById("right-box-text").value
+
+        const e = document.getElementById("e-value").value;
+        const n = document.getElementById("n-value").value;
+
+        document.getElementById("cipher-variables").innerHTML = `<div class="card-text">
+                        <label for="e-value" class="col-form-label">e:</label>
+                        <input class="form-control" type="number" min="1" oninput="UpdateCipher()" id="e-value" step="1"
+                            value="911">
+
+                        <label for="n-value" class="col-form-label">n:</label>
+                        <input class="form-control" type="number" min="1" oninput="UpdateCipher()" id="n-value" step="1"
+                            value="17989001">
+
+                    </div>`
+
+        document.getElementById("e-value").value = e;
+        document.getElementById("n-value").value = n;
+        UpdateCipher();
+    }
+
+    function BeginDecrypt() {
+        if (!Encrypting) return;
+        Encrypting = false;
+        document.getElementById("left-box-status").innerHTML = "Cipher Text"
+        document.getElementById("right-box-status").innerHTML = "Plain Text"
+        document.getElementById("left-box-text").value = document.getElementById("right-box-text").value
+
+        document.getElementById("cipher-variables").innerHTML = `
+        <div class="card-text">
+                        <label for="e-value" class="col-form-label">p:</label>
+                        <input class="form-control" type="number" min="1" oninput="UpdateD()" id="p-value" step="1"
+                            value="8999">
+
+                        <label for="n-value" class="col-form-label">q:</label>
+                        <input class="form-control" type="number" min="1" oninput="UpdateD()" id="q-value" step="1"
+                            value="1999">
+
+                            <label for="e-value" class="col-form-label">e:</label>
+                        <input class="form-control" type="number" min="1" oninput="UpdateD()" id="e-value" step="1"
+                            value="911">
+
+                            <label for="d-value" class="col-form-label">d:</label>
+                        <input class="form-control" readonly type="number" min="1" id="d-value" step="1"
+                            value="3867935">
+                            <label for="n-value" class="col-form-label">n:</label>
+                        <input class="form-control" readonly type="number" min="1" id="n-value" step="1"
+                            value="17989001">
+                    </div>
+        `
+        UpdateD();
+        UpdateCipher();
+    }
+
+    function UpdateD() {
+        document.getElementById("d-value").value = ""
+        const p = bigInt(document.getElementById("p-value").value)
+        const q = bigInt(document.getElementById("q-value").value)
+        const e = bigInt(document.getElementById("e-value").value)
+
+        if (!p || !q || !e) return;
+
+        const num = p.prev().multiply(q.prev());
+
+        document.getElementById("n-value").value = p.multiply(q).toString();
+        document.getElementById("d-value").value = e.modInv(num).toString();
+
+        UpdateCipher();
+    }
+
+    function Cipher() {
+
+    }
+
+    function DeCipher() {
+
+    }
+
+    function UpdateCipher() {
+        console.clear();
+        let LeftText = document.getElementById("left-box-text").value
+        const RightTextBox = document.getElementById("right-box-text")
+        RightTextBox.value = "";
+        const n = bigInt(document.getElementById("n-value").value)
+
+        if (Encrypting) {
+            const e = bigInt(document.getElementById("e-value").value)
+
+            const reg = new RegExp(/[^a-z]/, "gi")
+            LeftText = LeftText.replace(reg, "")
+
+
+            if (!LeftText) return;
+            else if (!e) return RightTextBox.value = "ERROR: Invalid e value"
+            else if (!n) return RightTextBox.value = "ERROR: Invalid n value"
+ 
+            let NumberString = "";
+            for (let i = 0; i < LeftText.length; i++) {
+                const legacy_string = NumberString;
+                NumberString += LetterNums[LeftText[i].toLowerCase()]
+                if (bigInt(NumberString).greater(n)) {
+                    NumberString = LetterNums[LeftText[i].toLowerCase()];
+                    console.log(legacy_string)
+                    RightTextBox.value += bigInt(legacy_string).modPow(e, n) + "\n";
+                }
+            }
+            if (NumberString.length > 0) {
+                console.log(NumberString)
+                RightTextBox.value += bigInt(NumberString).modPow(e, n);
+
+                NumberString = "";
+            }
+
+        } else {
+            const d = bigInt(document.getElementById("d-value").value)
+            if (!LeftText) return;
+            else if (!d) return RightTextBox.value = "ERROR: Invalid d value"
+            else if (!n) return RightTextBox.value = "ERROR: Invalid n value"
+
+            const nums = LeftText.split("\n");
+
+            let LeftOverNum = "";
+
+            for (let i = 0; i < nums.length; i++) {
+                if (!parseInt(nums[i])) {
+                    RightTextBox.value = "ERROR: Invalid number";
+                    return;
+                }
+                const BigNum = bigInt(nums[i]);
+                const AlphaNums = BigNum.modPow(d, n).toString();
+
+                const parsedNums = parseAlphaNums(LeftOverNum + AlphaNums);
+                console.log(parsedNums)
+                LeftOverNum = parsedNums.leftovernum
+                RightTextBox.value += parsedNums.decryption;
+            }
+        }
+
+    }
+
+    function parseAlphaNums(Nums) {
+        let answer = {
+            "decryption": "",
+            "leftovernum": "",
+            "Nums": Nums
+        };
+        for (let i = 0; i < Nums.length; i += 2) {
+            if (!Nums[i+1]) break;
+            const AlphaIndex = parseInt(Nums[i] + Nums[i + 1]);
+            if (!AlphaIndex || AlphaIndex > alphabet.length) {
+                if (Nums[0] == "0") return {
+                    "decryption": "ERROR: Invalid number",
+                    "leftovernum": "",
+                    "Nums": Nums
+                };
+                answer = parseAlphaNums("0" + Nums)
+                return answer;
+            }
+            answer.decryption += alphabet[AlphaIndex - 1]
+        }
+
+        if (Nums.length % 2 != 0) answer.leftovernum = Nums[Nums.length - 1]
+
+        return answer;
+    }
+
+    function UpdateCipherReversed() {
+
+    }
 </script>
 
 </html>
