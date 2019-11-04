@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Cryptography - Codeword</title>
+    <script src="../jquery.js"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
+    <link rel="stylesheet" href="./main.css">
+</head>
+
+<body>
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="http://www.gabobabo.xyz">Home</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                Ciphers
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" href="../index.html">Home</a>
+                                <a class="dropdown-item" href="../caesar/">Caesar Cipher</a>
+                                <a class="dropdown-item" href="../affine/">Affine Cipher</a>
+                                <a class="dropdown-item" href="../codeword/">Codeword Cipher</a>
+        
+                                <a class="dropdown-item" href="../vigenere/">Vigenère Cipher</a>
+                                <a class="dropdown-item" href="../playfair/">Playfair Cipher</a>
+                                <a class="dropdown-item" href="../hill2/">Hill 2x2 Cipher</a>
+                                <a class="dropdown-item" href="../hill3/">Hill 3x3 Cipher</a>
+                                <a class="dropdown-item" href="../rsa/">RSA Cipher</a>
+
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                Other Pages
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <a class="dropdown-item" href="http://www.gabobabo.xyz/Cleanify">Cleanify</a>
+                                <a class="dropdown-item" href="http://www.gabobabo.xyz/Drivify/">Drivify</a>
+                                <a class="dropdown-item" href="http://www.gabobabo.xyz/names/">Names</a>
+                            </div>
+                        </li>
+
+            </ul>
+            <span class="navbar-text">
+                Codeword Cipher
+            </span>
+        </div>
+    </nav>
+
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">Codeword Cipher</h1>
+            <p class="lead">A monoalphabetic cipher that uses a codeword and starting letter to remake the alphabet. No math required</br>
+                
+            </p>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="card-deck">
+            <div class="card text-white bg-secondary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title" id="left-box-status">Plain Text</h5>
+                    <textarea spellcheck="false" oninput="UpdateCipher()" id="left-box-text" class="card-text"
+                        style="width:100%;height:200px;"></textarea>
+
+                </div>
+                <a class="btn btn-primary" onclick="CopyFunction('left-box-text')">Copy text</a>
+
+            </div>
+            <div class="card text-center text-white bg-info mb-3">
+                <div class="btn-group btn-group-toggle card-title" data-toggle="buttons">
+                    <label class="btn btn-secondary active" onclick="BeginEncrypt()">
+                        <input type="radio" name="options" id="option1" autocomplete="off"> Encrypt
+                    </label>
+                    <label class="btn btn-secondary" onclick="BeginDecrypt()">
+                        <input type="radio" name="options" id="option2" autocomplete="off"> Decrypt
+                    </label>
+                </div>
+                <div class="card-body d-flex justify-content-center align-items-center">
+
+                    <div class="card-text">
+                        <label for="codeword-value" class="col-form-label">Codeword:</label>
+                        <input class="form-control" type="text" oninput="UpdateInfo()" id="codeword-value" value="BAFFLEGAB">
+
+                        <label for="starting-value" class="col-form-label">Starting Letter:</label>
+                        <input class="form-control" type="text" oninput="UpdateInfo()" id="starting-value" value="M">
+
+                    </div>
+
+                </div>
+                <button onclick="Hack()" class="btn btn-primary">Hack</button>
+
+            </div>
+            <div class="card text-right text-white bg-secondary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title" id="right-box-status">Cipher Text</h5>
+                    <textarea spellcheck="false" id="right-box-text" class="card-text"
+                        style="height:200px;width:100%;"></textarea>
+
+                </div>
+                <a class="btn btn-primary" onclick="CopyFunction('right-box-text')">Copy text</a>
+
+            </div>
+        </div>
+        <div class="table-responsive" id="table-hack">
+
+        </div>
+    </div>
+</body>
+<script>
+    function mod(n, m) {
+        return ((n % m) + m) % m;
+    }
+    let Encrypting = true;
+    let Dictionary;
+    const alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+    let NewAlphabet = []
+    $.getJSON("../dictionary.json", (data, textStatus, XHR) => {
+        Dictionary = data
+    })
+    UpdateInfo();
+    UpdateCipher();
+
+    function Hack() {
+        let CipherText
+        if (Encrypting) CipherText = document.getElementById("right-box-text").value;
+        else CipherText = document.getElementById("left-box-text").value;
+
+        if (!CipherText || !document.getElementById("codeword-value").value) return;
+        document.getElementById("table-hack").innerHTML = ""
+
+        const table = document.createElement("TABLE")
+        table.className = "table table-hover table-sm"
+
+        const tbody = document.createElement("tbody")
+
+        for (let i = 0; i < 26; i++) {
+            const tr2 = document.createElement("tr")
+            tr2.className = "table-danger"
+
+            const th3 = document.createElement("th")
+            th3.scope = "row";
+            th3.innerHTML = alphabet[i].toUpperCase();
+            tr2.appendChild(th3)
+
+            const td = document.createElement("td")
+            UpdateInfo(alphabet[i].toUpperCase())
+            for (let j = 0; j < CipherText.length; j++) {
+                td.innerHTML += DeCipher(CipherText[j])
+            }
+            const words = td.innerHTML.split(" ")
+            let points = 0;
+
+            for (let j = 0; j < words.length; j++) {
+                if (Dictionary[words[j].toLowerCase()]) {
+                    points++;
+                }
+            }
+            if (points == words.length) tr2.className = "table-success"
+            else if (points > 1) tr2.className = "table-warning"
+            tr2.appendChild(td)
+            tbody.appendChild(tr2)
+        }
+        table.appendChild(tbody)
+        document.getElementById("table-hack").appendChild(table)
+    }
+
+    function UpdateInfo(start) {
+        let codeword = document.getElementById("codeword-value").value
+        const starting = start || document.getElementById("starting-value").value
+        if (!codeword) {
+            NewAlphabet = []
+            if (Encrypting) {
+                document.getElementById("right-box-text").value = "ERROR: Invalid Codeword"
+            } else {
+                document.getElementById("left-box-text").value = "ERROR: Invalid Codeword"
+            }
+            return;
+        } else if (!starting) {
+            NewAlphabet = []
+            if (Encrypting) {
+                document.getElementById("right-box-text").value = "ERROR: Invalid starting letter"
+            } else {
+                document.getElementById("left-box-text").value = "ERROR: Invalid starting letter"
+            }
+            return;
+        }
+        const StartIndex = alphabet.indexOf(starting.toLowerCase())
+        if (StartIndex < 0) {
+            NewAlphabet = []
+            if (Encrypting) {
+                document.getElementById("right-box-text").value = "ERROR: Invalid starting letter"
+            } else {
+                document.getElementById("left-box-text").value = "ERROR: Invalid starting letter"
+            }
+            return;
+        }
+        codeword = codeword.split("")
+        let UnusedLetters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+
+        for (let i = 0; i < codeword.length; i++) {
+            if (UnusedLetters.indexOf(codeword[i].toLowerCase()) == -1) {
+                codeword.splice(i, 1);
+                i--;
+            } else {
+                UnusedLetters.splice(UnusedLetters.indexOf(codeword[i].toLowerCase()), 1)
+            }
+        }
+
+        for (let i = 0; i < 26; i++) {
+            if (i < codeword.length) {
+                NewAlphabet[(StartIndex + i) % 26] = codeword[i].toLowerCase();
+            } else {
+                NewAlphabet[(StartIndex + i) % 26] = UnusedLetters[i - codeword.length]
+            }
+        }
+        if (!start) UpdateCipher()
+    }
+
+    function CopyFunction(ID) {
+        /* Get the text field */
+        var copyText = document.getElementById(ID);
+
+        /* Select the text field */
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+        /* Copy the text inside the text field */
+        document.execCommand("copy");
+    }
+
+    function BeginEncrypt() {
+        if (Encrypting) return;
+        Encrypting = true;
+        document.getElementById("left-box-status").innerHTML = "Plain Text"
+        document.getElementById("right-box-status").innerHTML = "Cipher Text"
+        document.getElementById("left-box-text").value = document.getElementById("right-box-text").value
+
+        UpdateCipher();
+    }
+
+    function BeginDecrypt() {
+        if (!Encrypting) return;
+        Encrypting = false;
+        document.getElementById("left-box-status").innerHTML = "Cipher Text"
+        document.getElementById("right-box-status").innerHTML = "Plain Text"
+        document.getElementById("left-box-text").value = document.getElementById("right-box-text").value
+
+        UpdateCipher();
+    }
+
+    function Cipher(character) {
+        if (!character.match(/[a-z]/i)) return character;
+
+        if (character == character.toUpperCase()) {
+            return NewAlphabet[alphabet.indexOf(character.toLowerCase())].toUpperCase()
+        } else {
+            return NewAlphabet[alphabet.indexOf(character.toLowerCase())].toLowerCase()
+
+        }
+    }
+
+    function DeCipher(character) {
+        if (!character.match(/[a-z]/i)) return character;
+
+        if (character == character.toUpperCase()) {
+            return alphabet[NewAlphabet.indexOf(character.toLowerCase())].toUpperCase()
+        } else {
+            return alphabet[NewAlphabet.indexOf(character.toLowerCase())].toLowerCase()
+
+        }
+    }
+
+    function UpdateCipher() {
+        document.getElementById("table-hack").innerHTML = ""
+
+        const LeftText = document.getElementById("left-box-text").value
+        const RightTextBox = document.getElementById("right-box-text")
+        if (NewAlphabet == [] || !NewAlphabet || NewAlphabet.length == 0) return;
+
+        RightTextBox.value = "";
+
+        if (Encrypting) {
+            for (let i = 0; i < LeftText.length; i++) {
+                RightTextBox.value += Cipher(LeftText[i])
+            }
+        } else {
+            for (let i = 0; i < LeftText.length; i++) {
+                RightTextBox.value += DeCipher(LeftText[i])
+            }
+        }
+
+    }
+</script>
+
+</html>
