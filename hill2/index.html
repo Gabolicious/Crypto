@@ -72,8 +72,10 @@
                 Uses a 2x2 matrix thats determinate is relatively prime to 26. Then goes 2 letters at a time to encrypt.
                 If the message has an odd number of characters it will add a "Z" to the end. a = 1
                 </br>
-                <code>Encrypt = [<var>Matrix</var> * [<var>1st character</var>, <var>2nd character</var>]] mod 26</code></br>
-                <code>Decrypt = [<var>Inverse of Matrix</var> * [<var>1st character</var>, <var>2nd character</var>]] mod 26</code></br>
+                <code>Encrypt = [<var>Matrix</var> * [<var>1st character</var>, <var>2nd character</var>]] mod
+                    26</code></br>
+                <code>Decrypt = [<var>Inverse of Matrix</var> * [<var>1st character</var>, <var>2nd character</var>]]
+                    mod 26</code></br>
             </p>
         </div>
     </div>
@@ -139,29 +141,27 @@
     </div>
 </body>
 <script>
-    function mod(n, m) {
+    function mod(n, m) { //custom mod
         return ((n % m) + m) % m;
     }
-    let Encrypting = true;
-    let The_Matrix = [
+
+    let Encrypting = true; //set to encrypting
+
+    let The_Matrix = [ //hill 2x2 matrix
         [5, 9],
         [14, 23]
     ]
-    const Keys = [3, 5, 7, 9, 11, 15, 17, 19, 21, 23, 25]
 
-    const Inverses = [9, 21, 15, 3, 19, 7, 23, 11, 5, 17, 25]
+    const Keys = [3, 5, 7, 9, 11, 15, 17, 19, 21, 23, 25] //keys
 
-    let Dictionary;
-    $.getJSON("../dictionary.json", (data, textStatus, XHR) => {
-        Dictionary = data
-    })
+    const Inverses = [9, 21, 15, 3, 19, 7, 23, 11, 5, 17, 25] //inverse of key
 
-    function UpdateMatrix(x, y, id) {
-        The_Matrix[x][y] = parseInt(document.getElementById(id).value);
-        UpdateCipher();
+    function UpdateMatrix(x, y, id) { //update code matrix if input field is changed
+        The_Matrix[x][y] = parseInt(document.getElementById(id).value); //set patrix to parse int
+        UpdateCipher(); //update the cipher
     }
 
-    function Hack() {
+    function Hack() { //no hack
 
     }
 
@@ -176,54 +176,54 @@
         /* Copy the text inside the text field */
         document.execCommand("copy");
     }
-    UpdateCipher();
 
-    function Det() {
+    UpdateCipher(); //update the cipher
+
+    function Det() { //get the determinate of 2x2 matrix
         return (The_Matrix[0][0] * The_Matrix[1][1]) - (The_Matrix[0][1] * The_Matrix[1][0]);
     }
 
-    function BeginEncrypt() {
-        if (Encrypting) return;
-        Encrypting = true;
-        document.getElementById("left-box-status").innerHTML = "Plain Text"
+    function BeginEncrypt() { //start encrypting
+        if (Encrypting) return; //stop
+        Encrypting = true; //set encrypting
+        document.getElementById("left-box-status").innerHTML = "Plain Text" //change titles
         document.getElementById("right-box-status").innerHTML = "Cipher Text"
 
+        const det = mod(Det(), 26) //get the determinate mod 26
+        const KeyIndex = Keys.indexOf(Math.abs(det)) //check if its a valid matrix
+        if (KeyIndex < 0) return; //invalid
+        let Inverse = Inverses[KeyIndex]; //get inverse of key
+        if (det < 0) Inverse *= -1 //if the determinate is negative, set inverse to negative
 
-        const det = mod(Det(), 26);
-
-        const KeyIndex = Keys.indexOf(Math.abs(det))
-        if (KeyIndex < 0) return;
-        let Inverse = Inverses[KeyIndex];
-        if (det < 0) Inverse *= -1;
-
-        const EncryptionMatrix = The_Matrix
-        const DecryptionMatrix = [
-            [EncryptionMatrix[1][1], -EncryptionMatrix[0][1]],
-            [-EncryptionMatrix[1][0], EncryptionMatrix[0][0]]
+        const DecryptionMatrix = [ //inverse matrix
+            [mod(Inverse * The_Matrix[1][1], 26), mod(Inverse * -The_Matrix[0][1],
+                26)], //inverse * old matrix position, mod 26
+            [mod(Inverse * -The_Matrix[1][0], 26), mod(Inverse * The_Matrix[0][0], 26)]
         ]
 
-        The_Matrix[0][0] = mod(Inverse * DecryptionMatrix[0][0], 26)
-        The_Matrix[0][1] = mod(Inverse * DecryptionMatrix[0][1], 26)
-        The_Matrix[1][0] = mod(Inverse * DecryptionMatrix[1][0], 26)
-        The_Matrix[1][1] = mod(Inverse * DecryptionMatrix[1][1], 26)
+        The_Matrix[0][0] = DecryptionMatrix[0][0] //change the matrix to decrypted one
+        The_Matrix[0][1] = DecryptionMatrix[0][1]
+        The_Matrix[1][0] = DecryptionMatrix[1][0]
+        The_Matrix[1][1] = DecryptionMatrix[1][1]
 
-        document.getElementById("matrix-1-1").value = The_Matrix[0][0]
+        document.getElementById("matrix-1-1").value = The_Matrix[0][0] //update fields
         document.getElementById("matrix-1-2").value = The_Matrix[0][1]
         document.getElementById("matrix-2-1").value = The_Matrix[1][0]
         document.getElementById("matrix-2-2").value = The_Matrix[1][1]
 
-
-        UpdateCipher();
+        UpdateCipher(); //update cipher
     }
 
 
     function BeginDecrypt() {
-        if (!Encrypting) return;
-        Encrypting = false;
-        document.getElementById("left-box-status").innerHTML = "Cipher Text"
+        if (!Encrypting) return; //stop
+        Encrypting = false; //set to decrypting
+        document.getElementById("left-box-status").innerHTML = "Cipher Text" //update titles
         document.getElementById("right-box-status").innerHTML = "Plain Text"
         document.getElementById("left-box-text").value = document.getElementById("right-box-text").innerHTML
 
+
+        //same steps in BeginEncrypt()
         const det = mod(Det(), 26)
         const KeyIndex = Keys.indexOf(Math.abs(det))
         if (KeyIndex < 0) return;
@@ -248,79 +248,83 @@
         UpdateCipher();
     }
 
-    function insert(str, index, value) {
+    function insert(str, index, value) { //insert value into string
         return str.substr(0, index) + value + str.substr(index);
     }
 
-    function Cipher(LeftLetter, RightLetter, Matrix) {
-        let EncryptedLetters = ""
-        const FirstCharCode = LeftLetter.charCodeAt(0);
-        const FirstStart = (LeftLetter == LeftLetter.toUpperCase()) ? "A".charCodeAt(0) - 1 : "a".charCodeAt(0) - 1;
-        const FirstNum = FirstCharCode - FirstStart;
+    function Cipher(LeftLetter, RightLetter, Matrix) { //encrypt and decrypt
+        let EncryptedLetters = "" //start with no string
 
-        const SecondCharCode = RightLetter.charCodeAt(0);
+        const FirstCharCode = LeftLetter.charCodeAt(0); //get ascii of first character
+        const FirstStart = (LeftLetter == LeftLetter.toUpperCase()) ? "A".charCodeAt(0) - 1 : "a".charCodeAt(0) -
+        1; //get num required to make a = 1
+        const FirstNum = FirstCharCode - FirstStart; //get the num of letter
+
+        const SecondCharCode = RightLetter.charCodeAt(0); //get ascii for second character
         const SecondStart = (RightLetter == RightLetter.toUpperCase()) ? "A".charCodeAt(0) - 1 : "a".charCodeAt(0) - 1;
         const SecondNum = SecondCharCode - SecondStart;
 
-
-
         const Answer = [The_Matrix[0][0] * FirstNum + The_Matrix[0][1] * SecondNum, The_Matrix[1][0] * FirstNum +
             The_Matrix[1][1] * SecondNum
-        ];
+        ]; //multiply matrix with numbers
 
-        let FirstMod = mod(Answer[0], 26);
-        if (FirstMod == 0) FirstMod = 26;
+        let FirstMod = mod(Answer[0], 26); //mod first letter
+        if (FirstMod == 0) FirstMod = 26; //if its 0 set to 26
 
-        let SecondMod = mod(Answer[1], 26);
-        if (SecondMod == 0) SecondMod = 26
+        let SecondMod = mod(Answer[1], 26); //mod second letter
+        if (SecondMod == 0) SecondMod = 26 //if its 0 set to 26
+
         return String.fromCharCode(FirstMod + FirstStart) + String.fromCharCode(SecondMod + SecondStart)
     }
 
-    function DeCipher(LeftLetter, RightLetter, Matrix) {
+    function getAllIndexes(arr, reg) { //get the index of all spaces and characters that match the regex
+        let indexes = []; //store indexes
 
-    }
-
-    function getAllIndexes(arr, reg) {
-        let indexes = [],
-            i;
-        for (i = 0; i < arr.length; i++) {
-            if (reg.test(arr[i]) || arr[i] == " ") {
-                indexes.push([i, arr[i]]);
+        for (let i = 0; i < arr.length; i++) { //go through all the characters
+            if (reg.test(arr[i]) || arr[i] == " ") { //if matches regex or is a space
+                indexes.push([i, arr[i]]); //add the index and what the character is
             }
         }
         return indexes;
     }
 
-    function UpdateCipher() {
-        let LeftText = document.getElementById("left-box-text").value
-        const RightTextBox = document.getElementById("right-box-text")
-        RightTextBox.innerHTML = "";
-        if (!LeftText) return;
-        if (Keys.indexOf(mod(Math.abs(Det()), 26)) < 0) return RightTextBox.value = "ERROR: Invalid matrix";
-        const reg = new RegExp(/[^a-z]/, "gi")
-        let TextBeforeRemovedSpaces = LeftText
-        LeftText = LeftText.replace(reg, "")
-        if (LeftText.length % 2 != 0) {
-            LeftText += "Z"
+    function UpdateCipher() { //update the cipher text
+        let LeftText = document.getElementById("left-box-text").value //get left text
+        const RightTextBox = document.getElementById("right-box-text"); //get the right text box
+        RightTextBox.innerHTML = ""; //clear the box
+
+        if (!LeftText) return; //if no text stop
+
+        if (Keys.indexOf(mod(Det(), 26)) < 0) return RightTextBox.value =
+        "ERROR: Invalid matrix"; //if the determinate isn't a key stop
+
+        const reg = new RegExp(/[^a-z]/, "gi") //not a through z
+
+        let TextBeforeRemovedSpaces = LeftText //store original text
+
+        LeftText = LeftText.replace(reg, "") //remove non latin characters
+
+        if (LeftText.length % 2 != 0) { //if its odd number of characters 
+            LeftText += "Z" //add Z to both texts
             TextBeforeRemovedSpaces += "Z"
         }
-        const Spaces = getAllIndexes(TextBeforeRemovedSpaces, reg);
 
-        for (let k = 0; k < LeftText.length; k += 2) {
-            const newValue = Cipher(LeftText[k], LeftText[k + 1], The_Matrix)
-            if (!newValue) {
-                RightTextBox.innerHTML = "ERROR: Invalid matrix"
+        const Spaces = getAllIndexes(TextBeforeRemovedSpaces, reg); //store the spaces and special chars
+
+        for (let k = 0; k < LeftText.length; k += 2) { //go through every 2 letters
+            const newValue = Cipher(LeftText[k], LeftText[k + 1], The_Matrix); //store response
+            if (!newValue) { //if no value
+                RightTextBox.innerHTML = "ERROR: Invalid matrix" //error
                 return;
             }
-            RightTextBox.innerHTML += newValue
+            RightTextBox.innerHTML += newValue //add the new value to right text
         }
 
-        for (let k = 0; k < Spaces.length; k++) {
-            RightTextBox.innerHTML = insert(RightTextBox.innerHTML, Spaces[k][0], Spaces[k][1])
+        for (let k = 0; k < Spaces.length; k++) { //go through all spaces
+            RightTextBox.innerHTML = insert(RightTextBox.innerHTML, Spaces[k][0], Spaces[k][1]) //add them back
         }
 
-
-        document.getElementById("table-hack").innerHTML = ""
+        document.getElementById("table-hack").innerHTML = "" //clear table hack
     }
 </script>
 
