@@ -27,36 +27,36 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav mr-auto">
-                    <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
-                                Ciphers
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" href="../index.html">Home</a>
-                                <a class="dropdown-item" href="../caesar/">Caesar Cipher</a>
-                                <a class="dropdown-item" href="../affine/">Affine Cipher</a>
-                                <a class="dropdown-item" href="../codeword/">Codeword Cipher</a>
-        
-                                <a class="dropdown-item" href="../vigenere/">Vigenère Cipher</a>
-                                <a class="dropdown-item" href="../playfair/">Playfair Cipher</a>
-                                <a class="dropdown-item" href="../hill2/">Hill 2x2 Cipher</a>
-                                <a class="dropdown-item" href="../hill3/">Hill 3x3 Cipher</a>
-                                <a class="dropdown-item" href="../rsa/">RSA Cipher</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Ciphers
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="../index.html">Home</a>
+                        <a class="dropdown-item" href="../caesar/">Caesar Cipher</a>
+                        <a class="dropdown-item" href="../affine/">Affine Cipher</a>
+                        <a class="dropdown-item" href="../codeword/">Codeword Cipher</a>
 
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
-                                Other Pages
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <a class="dropdown-item" href="http://www.gabobabo.xyz/Cleanify">Cleanify</a>
-                                <a class="dropdown-item" href="http://www.gabobabo.xyz/Drivify/">Drivify</a>
-                                <a class="dropdown-item" href="http://www.gabobabo.xyz/names/">Names</a>
-                            </div>
-                        </li>
+                        <a class="dropdown-item" href="../vigenere/">Vigenère Cipher</a>
+                        <a class="dropdown-item" href="../playfair/">Playfair Cipher</a>
+                        <a class="dropdown-item" href="../hill2/">Hill 2x2 Cipher</a>
+                        <a class="dropdown-item" href="../hill3/">Hill 3x3 Cipher</a>
+                        <a class="dropdown-item" href="../rsa/">RSA Cipher</a>
+
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Other Pages
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="http://www.gabobabo.xyz/Cleanify">Cleanify</a>
+                        <a class="dropdown-item" href="http://www.gabobabo.xyz/Drivify/">Drivify</a>
+                        <a class="dropdown-item" href="http://www.gabobabo.xyz/names/">Names</a>
+                    </div>
+                </li>
 
             </ul>
             <span class="navbar-text">
@@ -126,14 +126,10 @@
     </div>
 </body>
 <script>
-    let Encrypting = true;
-    let Dictionary;
-    $.getJSON("../dictionary.json", (data, textStatus, XHR) => {
-        Dictionary = data
-    })
+    let Encrypting = true; //set to encrypting
 
     function Hack() {
-        
+
     }
 
     function CopyFunction(ID) {
@@ -147,34 +143,35 @@
         /* Copy the text inside the text field */
         document.execCommand("copy");
     }
-    UpdateCipher();
 
-    function BeginEncrypt() {
-        if (Encrypting) return;
-        Encrypting = true;
-        document.getElementById("left-box-status").innerHTML = "Plain Text"
+    UpdateCipher(); //update the cipher
+
+    function BeginEncrypt() { //start encrypting
+        if (Encrypting) return; //stop
+        Encrypting = true; //set to encrypting
+        document.getElementById("left-box-status").innerHTML = "Plain Text" //change titles
         document.getElementById("right-box-status").innerHTML = "Cipher Text"
-        document.getElementById("left-box-text").value = document.getElementById("right-box-text").value
+        document.getElementById("left-box-text").value = document.getElementById("right-box-text").value //swap
 
-        UpdateCipher();
+        UpdateCipher(); //update
     }
 
-    function BeginDecrypt() {
-        if (!Encrypting) return;
-        Encrypting = false;
-        document.getElementById("left-box-status").innerHTML = "Cipher Text"
+    function BeginDecrypt() { //start decrypting
+        if (!Encrypting) return; //stop
+        Encrypting = false; //set to decrypting
+        document.getElementById("left-box-status").innerHTML = "Cipher Text" //change titles
         document.getElementById("right-box-status").innerHTML = "Plain Text"
-        document.getElementById("left-box-text").value = document.getElementById("right-box-text").value
+        document.getElementById("left-box-text").value = document.getElementById("right-box-text").value //swap
 
-        UpdateCipher();
+        UpdateCipher(); //update
     }
 
-    function insert(str, index, value) {
+    function insert(str, index, value) { //insert value into string
         return str.substr(0, index) + value + str.substr(index);
     }
 
-    function Cipher(text, code) {
-        const matrix = [
+    function Cipher(text, code) { //cipher
+        const matrix = [ //matrix for vigenere
             ["a", "b", "c", "d", "e", "f", "g", "h", 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
                 'u', 'v', 'w', 'x', 'y', 'z'
             ], // A
@@ -255,38 +252,36 @@
             ], // Z
 
         ]
-        let Encrypted = ""
-        if (!code) return ""
-        var Codeword = code.repeat(text.length)
 
+        let Encrypted = "" //not encrypted
+        if (!code) return "" //no code stop
 
-        for (let i = 0; i < text.length; i++) {
-            if (!text[i].match(/[a-z]/i)) {
-                Codeword = insert(Codeword, i, " ")
+        var Codeword = code.repeat(text.length) //repeat codeword for all text
 
-                Encrypted += text[i]
+        for (let i = 0; i < text.length; i++) { //loop through text
+            if (!text[i].match(/[a-z]/i)) { //if its not a latin char
+                Codeword = insert(Codeword, i, " ") //add space to codeword
 
-            } else {
-                const TextCharCode = text.charCodeAt(i);
+                Encrypted += text[i] //add not latin char
+            } else { //latin char
+                const TextCharCode = text.charCodeAt(i); //get code
                 const TextStart = (text[i] == text[i].toUpperCase()) ? "A".charCodeAt(0) : "a".charCodeAt(0);
+                const TextIndex = TextCharCode - TextStart //convert to a = 0;
 
-                const TextIndex = TextCharCode - TextStart
-
-                const CodewordCharCode = Codeword.charCodeAt(i)
+                const CodewordCharCode = Codeword.charCodeAt(i) //get codeword char
                 const CodewordStart = (Codeword[i] == Codeword[i].toUpperCase()) ? "A".charCodeAt(0) : "a".charCodeAt(0)
+                const CodewordIndex = CodewordCharCode - CodewordStart; //conver a = 0
 
-                const CodewordIndex = CodewordCharCode - CodewordStart;
-
-                let EncryptedChar = matrix[TextIndex][CodewordIndex];
-                if (text[i] == text[i].toUpperCase()) Encrypted += EncryptedChar.toUpperCase();
-                else Encrypted += EncryptedChar.toLowerCase();
+                let EncryptedChar = matrix[TextIndex][CodewordIndex]; //go to matrix encrypt
+                if (text[i] == text[i].toUpperCase()) Encrypted += EncryptedChar.toUpperCase(); //upper case
+                else Encrypted += EncryptedChar.toLowerCase(); //lower case
             }
         }
         return Encrypted
     }
 
     function DeCipher(text, code) {
-        const matrix = [
+        const matrix = [ //decryption veginere
             [
                 "a",
                 "b",
@@ -1016,26 +1011,25 @@
                 "a"
             ]
         ]
-        if (!code || !text) return ""
-        let Codeword = code.repeat(text.length)
-        let Encrypted = ""
-        for (let i = 0; i < text.length; i++) {
-            if (!text[i].match(/[a-z]/i)) {
-                Codeword = insert(Codeword, i, " ")
 
-                Encrypted += text[i]
+        if (!code || !text) return "" //no code or text
+        let Codeword = code.repeat(text.length) //repeat codeword
+        let Encrypted = "" //no string
+        for (let i = 0; i < text.length; i++) { //loop through text
+            if (!text[i].match(/[a-z]/i)) { //if not a latin char
+                Codeword = insert(Codeword, i, " ") //insert space in codeword
 
-            } else {
-                const TextCharCode = text.charCodeAt(i);
+                Encrypted += text[i] //add char
+            } else { //latin char
+                const TextCharCode = text.charCodeAt(i); //get code
                 const TextStart = (text[i] == text[i].toUpperCase()) ? "A".charCodeAt(0) : "a".charCodeAt(0);
+                const TextIndex = TextCharCode - TextStart //convert a = 0
 
-                const TextIndex = TextCharCode - TextStart
-
-                const CodewordCharCode = Codeword.charCodeAt(i)
+                const CodewordCharCode = Codeword.charCodeAt(i) //get codeword code
                 const CodewordStart = (Codeword[i] == Codeword[i].toUpperCase()) ? "A".charCodeAt(0) : "a".charCodeAt(0)
+                const CodewordIndex = CodewordCharCode - CodewordStart; //convert a = 0
 
-                const CodewordIndex = CodewordCharCode - CodewordStart;
-                let EncryptedChar = matrix[CodewordIndex][TextIndex];
+                let EncryptedChar = matrix[CodewordIndex][TextIndex]; //get decrypted char
                 if (text[i] == text[i].toUpperCase()) Encrypted += EncryptedChar.toUpperCase();
                 else Encrypted += EncryptedChar.toLowerCase();
             }
@@ -1043,17 +1037,19 @@
         return Encrypted
     }
 
-    function UpdateCipher() {
-        const Codeword = document.getElementById("codeword-value").value
-        const LeftText = document.getElementById("left-box-text").value
-        const RightTextBox = document.getElementById("right-box-text")
-        if (!Codeword) return RightTextBox.value = "ERROR: Invalid codeword"
-        RightTextBox.value = "";
-        if (Encrypting) {
-            RightTextBox.value = Cipher(LeftText, Codeword)
+    function UpdateCipher() { //update cipher
+        const Codeword = document.getElementById("codeword-value").value //get codeword
+        const LeftText = document.getElementById("left-box-text").value //get left text
+        const RightTextBox = document.getElementById("right-box-text") //get right text box
 
-        } else {
-            RightTextBox.value = DeCipher(LeftText, Codeword)
+        if (!Codeword) return RightTextBox.value = "ERROR: Invalid codeword" //if no codeword
+
+        RightTextBox.value = ""; //clear right text value
+
+        if (Encrypting) { //if encrypting
+            RightTextBox.value = Cipher(LeftText, Codeword) //encrypt
+        } else { //decrypting
+            RightTextBox.value = DeCipher(LeftText, Codeword) //decipher
 
         }
 
