@@ -52,7 +52,7 @@
                         Other Pages
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="http://www.gabobabo.xyz/Cleanify">Cleanify</a>
+                        <a class="dropdown-item" href="http://www.gabobabo.xyz/Cleanify">Cleanify</a>
                         <a class="dropdown-item" href="http://www.gabobabo.xyz/Drivify/">Drivify</a>
                         <a class="dropdown-item" href="http://www.gabobabo.xyz/names/">Names</a>
                     </div>
@@ -68,9 +68,11 @@
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
             <h1 class="display-4">Affine Cipher</h1>
-            <p class="lead">A monoalphabetic cipher that uses both multiplication and addition (adjusted to Ms. Neely way). A = 1</br>
+            <p class="lead">A monoalphabetic cipher that uses both multiplication and addition (adjusted to Ms. Neely
+                way). A = 1</br>
                 <code>Encrypt = [(<var>character code</var> + <var>b</var>) * <var>a</var>] mod 26</code></br>
-                <code>Decrypt = [(<var>character code</var> * <var>modular multiplicative inverse of a</var>) - <var>b</var>] mod 26</code>
+                <code>Decrypt = [(<var>character code</var> * <var>modular multiplicative inverse of a</var>) -
+                    <var>b</var>] mod 26</code>
             </p>
         </div>
     </div>
@@ -98,11 +100,11 @@
                 <div class="card-body d-flex justify-content-center align-items-center">
                     <div class="card-text">
                         <label for="slope-value" class="col-form-label">Multiply (a):</label>
-                        <input class="form-control" type="number" id="slope-value" oninput="UpdateCipher()"
-                                    value="5" step="1">
+                        <input class="form-control" type="number" id="slope-value" oninput="UpdateCipher()" value="5"
+                            step="1">
                         <label for="intercept-value" class="col-form-label">Add (b):</label>
-                        <input class="form-control" type="number" oninput="UpdateCipher()"
-                            id="intercept-value" step="1" value="8">
+                        <input class="form-control" type="number" oninput="UpdateCipher()" id="intercept-value" step="1"
+                            value="8">
                     </div>
                 </div>
                 <button onclick="Hack()" class="btn btn-primary">Hack</button>
@@ -117,79 +119,84 @@
             </div>
         </div>
         <div class="dropdown">
-            <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
                 Sort Hack By...
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <button class="dropdown-item active" id="multiply-option" onclick="SelectMultiply()">Multiply (a)</button>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <button class="dropdown-item active" id="multiply-option" onclick="SelectMultiply()">Multiply
+                    (a)</button>
                 <button class="dropdown-item" id="add-option" onclick="SelectAdd()">Add (b)</button>
-              </div>
+            </div>
         </div>
         <div class="accordion" id="table-hack">
         </div>
     </div>
 </body>
 <script>
-    function mod(n, m) {
+    function mod(n, m) { //custom mod because javascript mod can be buggy
         return ((n % m) + m) % m;
     }
 
-    let Encrypting = true;
-    let SortByMultiply = true;
-    let Dictionary;
-    const Keys = [3, 5, 7, 9, 11, 15, 17, 19, 21, 23, 25]
-    $.getJSON("../dictionary.json", (data, textStatus, XHR) => {
-        Dictionary = data
+    let Encrypting = true; //currently encrypting
+    let SortByMultiply = true; //sorted by multiply
+    const Keys = [3, 5, 7, 9, 11, 15, 17, 19, 21, 23, 25] //mod 26 keys
+    $.getJSON("../dictionary.json", (data, textStatus, XHR) => { //get the dictionary
+        var Dictionary = data
     })
-    function SelectMultiply() {
-        if (SortByMultiply) return;
-        SortByMultiply = true;
-        document.getElementById("multiply-option").className = "dropdown-item active";
+
+    function SelectMultiply() { //clicked on sort by multiply
+        if (SortByMultiply) return; //don't do anything if already selected
+        SortByMultiply = true; //change variable
+        document.getElementById("multiply-option").className = "dropdown-item active"; //change the class of button
         document.getElementById("add-option").className = "dropdown-item"
 
-        Hack();
+        Hack(); //redo hack
     }
-    function SelectAdd() {
-        if (!SortByMultiply) return;
-        SortByMultiply = false;
-        document.getElementById("multiply-option").className = "dropdown-item";
+
+    function SelectAdd() { //clicked on sort by add
+        if (!SortByMultiply) return; //don't do anything if already selected
+        SortByMultiply = false; //change variable
+        document.getElementById("multiply-option").className = "dropdown-item"; //change the class of button
         document.getElementById("add-option").className = "dropdown-item active"
 
-        Hack();
+        Hack(); //redo hack
     }
 
-    function Hack() {
-        let CipherText
-        if (Encrypting) CipherText = document.getElementById("right-box-text").value;
-        else CipherText = document.getElementById("left-box-text").value;
-        if (!CipherText) return;
-        document.getElementById("table-hack").innerHTML = ""
+    function Hack() { //hack affine
+        if (Encrypting) var CipherText = document.getElementById("right-box-text").value; //get the cipher text
+        else var CipherText = document.getElementById("left-box-text").value;
 
-        if (SortByMultiply) {
-            var OverallLength = Keys.length;
+        if (!CipherText) return; //stop if no cipher text
+
+        document.getElementById("table-hack").innerHTML = "" //clear hack
+
+        if (SortByMultiply) { //sorted by multiply
+            var OverallLength = Keys.length; //sort by keys
             var OverallStart = 0;
 
-            var InnerLength = 25;
+            var InnerLength = 25; //num you can add
             var innerStart = 1;
-        } else {
-            var OverallLength = 26;
+        } else { //sorted by add
+            var OverallLength = 26; //start by add
             var OverallStart = 1;
 
-            var InnerLength = Keys.length - 1;
+            var InnerLength = Keys.length - 1; //num you can multiply
             var innerStart = 0;
         }
-        for (let i = OverallStart; i < OverallLength; i++) {
-            const card = document.createElement("div")
+
+        for (let i = OverallStart; i < OverallLength; i++) { //loop through either keys or add
+            const card = document.createElement("div") //make a new card
             card.className = "card"
 
-            const card_header = document.createElement("div")
+            const card_header = document.createElement("div") //set the header
             card_header.className = "card-header"
             card_header.id = `heading${i}`;
 
-            const h2 = document.createElement("h2")
+            const h2 = document.createElement("h2"); //make h2
             h2.className = "mb-0"
 
-            const button = document.createElement("button")
+            const button = document.createElement("button") //make button
             button.className = "btn btn-link"
             button.type = "button";
             button.dataset.toggle = "collapse";
@@ -198,80 +205,81 @@
             button.setAttribute("aria-controls", `collapse${i}`)
 
             if (SortByMultiply) {
-                button.innerHTML = `Multiply: ${Keys[i]}`;
+                button.innerHTML = `Multiply: ${Keys[i]}`; //Say multiply
             } else {
-                button.innerHTML = `Add: ${i}`;
+                button.innerHTML = `Add: ${i}`; //say add
             }
 
-            h2.appendChild(button);
+            h2.appendChild(button); //add h2 to the button
 
-            card_header.appendChild(h2)
+            card_header.appendChild(h2); //add the h2 to the card header
 
-            card.appendChild(card_header);
+            card.appendChild(card_header); //add card header to the card
 
-            const collapse = document.createElement("div");
+            const collapse = document.createElement("div"); //make collapse
             collapse.id = `collapse${i}`;
             collapse.className = "collapse";
             collapse.setAttribute("aria-labelledby", `heading${i}`);
             collapse.dataset.parent = "#table-hack";
 
-            const card_body = document.createElement("div")
+            const card_body = document.createElement("div") //make the body
             card_body.className = "card-body";
 
-            const table = document.createElement("table");
+            const table = document.createElement("table"); //make a table
             table.className = "table table-hover table-sm";
 
-            const tbody = document.createElement("tbody")
+            const tbody = document.createElement("tbody"); //make the table body
 
-            for (let j = innerStart; j <= InnerLength; j++) {
-                const tr = document.createElement("tr");
+            for (let j = innerStart; j <= InnerLength; j++) { //loop through keys or add
+                const tr = document.createElement("tr"); //table row
                 tr.className = "table-danger";
 
-                const th = document.createElement("th");
+                const th = document.createElement("th"); //table header
                 th.scope = "row";
 
                 if (SortByMultiply) {
-                    th.innerHTML = "Add: " + j;
+                    th.innerHTML = "Add: " + j; //Add
                 } else {
-                    th.innerHTML = "Multiply: " + Keys[j];
+                    th.innerHTML = "Multiply: " + Keys[j]; //multiply
                 }
 
-                tr.appendChild(th)
+                tr.appendChild(th) //add the header to the table row
 
-                const td = document.createElement("td");
-                for (let k = 0; k < CipherText.length; k++) {
+                const td = document.createElement("td"); //make table description
+                for (let k = 0; k < CipherText.length; k++) { //decipher the text
                     if (SortByMultiply) {
-                        td.innerHTML += DeCipher(CipherText[k], Keys[i], j);
+                        td.innerHTML += DeCipher(CipherText[k], Keys[i], j); //use i has keys index
                     } else {
                         td.innerHTML += DeCipher(CipherText[k], Keys[j], i)
                     }
                 }
 
-                const words = td.innerHTML.split(" ");
+                const words = td.innerHTML.split(" "); //get all the words
                 let points = 0;
 
-                for (let k = 0; k < words.length; k++) {
-                    if (Dictionary[words[k].toLowerCase()]) {
-                        points++;
+                for (let k = 0; k < words.length; k++) { //go through all the words
+                    if (Dictionary[words[k].toLowerCase()]) { //if the dictionary has the word
+                        points++; //increase points 
                     }
                 }
-                if (points == words.length) tr.className = "table-success"
-                else if (points > 1) tr.className = "table-warning"
-                
-                tr.appendChild(td)
-                tbody.appendChild(tr)
-            
+
+                if (points == words.length) tr.className = "table-success" //all are words set to success
+                else if (points > 1) tr.className = "table-warning" //1 or more words, set to yellow
+
+                tr.appendChild(td) //add td to the row
+                tbody.appendChild(tr) //add table row to table
             }
-            table.appendChild(tbody)
 
-            card_body.appendChild(table)
+            table.appendChild(tbody) //add table body to table
 
-            collapse.appendChild(card_body);
+            card_body.appendChild(table) //add table to card
 
-            card.appendChild(collapse)
+            collapse.appendChild(card_body); //add card to collapse
 
-            document.getElementById("table-hack").appendChild(card)
-        }
+            card.appendChild(collapse) //add collapse to card
+
+            document.getElementById("table-hack").appendChild(card) //add card to table hack
+        } //move on to next key or add
     }
 
     function CopyFunction(ID) {
@@ -287,62 +295,69 @@
     }
     UpdateCipher();
 
-    function BeginEncrypt() {
-        if (Encrypting) return;
-        Encrypting = true;
-        document.getElementById("left-box-status").innerHTML = "Plain Text"
+    function BeginEncrypt() { //selected encrypt
+        if (Encrypting) return; //don't do anything if already encrypting
+        Encrypting = true; //set to encrypt
+        document.getElementById("left-box-status").innerHTML = "Plain Text" //update the titles
         document.getElementById("right-box-status").innerHTML = "Cipher Text"
         document.getElementById("left-box-text").value = document.getElementById("right-box-text").value
 
-        UpdateCipher();
+        UpdateCipher(); //update cipher
     }
 
-    function BeginDecrypt() {
-        if (!Encrypting) return;
-        Encrypting = false;
-        document.getElementById("left-box-status").innerHTML = "Cipher Text"
+    function BeginDecrypt() { //selected decrypt
+        if (!Encrypting) return; //don't do anything if decrypting
+        Encrypting = false; //set to decrypt
+        document.getElementById("left-box-status").innerHTML = "Cipher Text" //update titles
         document.getElementById("right-box-status").innerHTML = "Plain Text"
         document.getElementById("left-box-text").value = document.getElementById("right-box-text").value
 
-        UpdateCipher();
+        UpdateCipher(); //update cipher
     }
 
-    function Cipher(character, Slope, Intercept) {
-        if (!character.match(/[a-z]/i)) return character;
-        const CharCode = character.charCodeAt(0);
-        const Start = (character == character.toUpperCase()) ? "A".charCodeAt(0) : "a".charCodeAt(0);
-        return String.fromCharCode(mod((((CharCode - Start) + 1) + Intercept) * Slope - 1, 26) + Start)
+    function Cipher(character, Slope, Intercept) { //encrypt
+        if (!character.match(/[a-z]/i)) return character; //just return the character if its not a through z
+        const CharCode = character.charCodeAt(0); //get the ascii value
+        const Start = (character == character.toUpperCase()) ? "A".charCodeAt(0) : "a".charCodeAt(
+        0); //gets the number to subtract to make a = 0
+        return String.fromCharCode(mod((((CharCode - Start) + 1) + Intercept) * Slope - 1, 26) +
+            Start) //convert character to number, add intercept, multiply by slope, mod 26, convert to character
     }
 
-    function DeCipher(character, Slope, Intercept) {
-        if (!character.match(/[a-z]/i)) return character;
-        const CharCode = character.charCodeAt(0);
-        const Start = (character == character.toUpperCase()) ? "A".charCodeAt(0) : "a".charCodeAt(0);
-        for (let i = 1; i <= 25; i++) {
-            if ((Slope * i) % 26 == 1) {
-                var A = i;
-                break;
+    function DeCipher(character, Slope, Intercept) { //decrypt
+        if (!character.match(/[a-z]/i)) return character; //just return character if its not a through z
+        const CharCode = character.charCodeAt(0); //get the ascii value
+        const Start = (character == character.toUpperCase()) ? "A".charCodeAt(0) : "a".charCodeAt(
+        0); //get num to subtract to convert to a = 0
+        for (let i = 1; i <= 25; i++) { //get the inverse
+            if ((Slope * i) % 26 == 1) { //if the slope * num mod 26 is 1
+                var A = i; //set inverse to that num
+                break; //don't keep looking for inverse
             }
         }
 
-        return String.fromCharCode(mod(((CharCode - Start + 1) * A) - Intercept - 1, 26) + Start)
+        return String.fromCharCode(mod(((CharCode - Start + 1) * A) - Intercept - 1, 26) +
+            Start) //convert a  = 1, multiply by inverse, subtract intercept, convert to a = 0, mod 26, convert to ascii
     }
 
     function UpdateCipher() {
-        const slope = mod(parseInt(document.getElementById("slope-value").value), 26)
-        const Intercept = mod(parseInt(document.getElementById("intercept-value").value), 26)
-        const LeftText = document.getElementById("left-box-text").value
-        const RightTextBox = document.getElementById("right-box-text")
-        RightTextBox.value = "";
-        if (Intercept < 0 || Intercept > 26) return RightTextBox.value = "ERROR: Invaled b value";
-        if (Keys.indexOf(slope) < 0) return RightTextBox.value = "ERROR: Invaled a value";
+        const slope = mod(parseInt(document.getElementById("slope-value").value), 26) //get inputted slope value mod 26
+        const Intercept = mod(parseInt(document.getElementById("intercept-value").value),
+            26) //get the inputted intercept value mod 26
+        const LeftText = document.getElementById("left-box-text").value //get text in left box
+        const RightTextBox = document.getElementById("right-box-text") //get the right text box
+        RightTextBox.value = ""; //clear right text box
+        if (Intercept < 0 || Intercept > 26) return RightTextBox.value =
+        "ERROR: Invaled b value"; //if somehow has invalid intercept
+        if (Keys.indexOf(slope) < 0) return RightTextBox.value =
+        "ERROR: Invaled a value"; //if the number isn't a valid mod 26 key
 
-        if (Encrypting) {
-            for (let i = 0; i < LeftText.length; i++) {
+        if (Encrypting) { //if encrypting
+            for (let i = 0; i < LeftText.length; i++) { //cipher each value
                 RightTextBox.value += Cipher(LeftText[i], slope, Intercept)
             }
-        } else {
-            for (let i = 0; i < LeftText.length; i++) {
+        } else { //if decrypting
+            for (let i = 0; i < LeftText.length; i++) { //decipher each value
                 RightTextBox.value += DeCipher(LeftText[i], slope, Intercept)
             }
         }
