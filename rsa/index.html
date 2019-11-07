@@ -71,9 +71,9 @@
             <h1 class="display-4">RSA Cipher</h1>
             <p class="lead">A public key cipher. It's recommended to clear the cipher text box to change p and q values
                 for decryption, unless you like for things to be slow.
-            </br>
-            <code>Encrypt = [<var>Character numbers</var>^<var>e</var>] mod <var>n</var></code></br>
-            <code>Decrypt = [<var>Code</var>^<var>d</var>] mod <var>n</var></code></br>
+                </br>
+                <code>Encrypt = [<var>Character numbers</var>^<var>e</var>] mod <var>n</var></code></br>
+                <code>Decrypt = [<var>Code</var>^<var>d</var>] mod <var>n</var></code></br>
             </p>
         </div>
     </div>
@@ -129,7 +129,7 @@
     </div>
 </body>
 <script>
-    const LetterNums = {
+    const LetterNums = { //letter to num
         "a": "01",
         "b": "02",
         "c": "03",
@@ -159,16 +159,13 @@
     }
 
 
-    function mod(n, m) {
+    function mod(n, m) { //custom function
         return ((n % m) + m) % m;
     }
-    let Encrypting = true;
-    let Dictionary;
-    UpdateCipher();
 
-    $.getJSON("../dictionary.json", (data, textStatus, XHR) => {
-        Dictionary = data
-    })
+    let Encrypting = true; //set to encrypting
+
+    UpdateCipher(); //update cipher
 
     function Hack() {
 
@@ -185,21 +182,22 @@
         /* Copy the text inside the text field */
         document.execCommand("copy");
     }
+
     const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", 'I', 'J', 'K', 'L', 'M', 'N', 'O',
         'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
-    ]
+    ] //alphabet
 
-    function BeginEncrypt() {
-        if (Encrypting) return;
-        Encrypting = true;
-        document.getElementById("left-box-status").innerHTML = "Plain Text"
+    function BeginEncrypt() { //begin encrypt
+        if (Encrypting) return; //stop
+        Encrypting = true; //encrypt
+        document.getElementById("left-box-status").innerHTML = "Plain Text" //title
         document.getElementById("right-box-status").innerHTML = "Cipher Text"
-        document.getElementById("left-box-text").value = document.getElementById("right-box-text").value
+        document.getElementById("left-box-text").value = document.getElementById("right-box-text").value //swap
 
-        const e = document.getElementById("e-value").value;
-        const n = document.getElementById("n-value").value;
+        const e = document.getElementById("e-value").value; //get e value
+        const n = document.getElementById("n-value").value; //get n value
 
-        document.getElementById("cipher-variables").innerHTML = `<div class="card-text">
+        document.getElementById("cipher-variables").innerHTML = `<div class="card-text"> 
                         <label for="e-value" class="col-form-label">e:</label>
                         <input class="form-control" type="number" min="1" oninput="UpdateCipher()" id="e-value" step="1"
                             value="911">
@@ -208,19 +206,20 @@
                         <input class="form-control" type="number" min="1" oninput="UpdateCipher()" id="n-value" step="1"
                             value="17989001">
 
-                    </div>`
+                    </div>` //set to only specify e and n
 
-        document.getElementById("e-value").value = e;
+        document.getElementById("e-value").value = e; //set e and n to e and n
         document.getElementById("n-value").value = n;
-        UpdateCipher();
+
+        UpdateCipher(); //update cipher
     }
 
-    function BeginDecrypt() {
-        if (!Encrypting) return;
-        Encrypting = false;
-        document.getElementById("left-box-status").innerHTML = "Cipher Text"
+    function BeginDecrypt() { //start decrypting
+        if (!Encrypting) return; //stop
+        Encrypting = false; //set
+        document.getElementById("left-box-status").innerHTML = "Cipher Text" //title
         document.getElementById("right-box-status").innerHTML = "Plain Text"
-        document.getElementById("left-box-text").value = document.getElementById("right-box-text").value
+        document.getElementById("left-box-text").value = document.getElementById("right-box-text").value //swap
 
         document.getElementById("cipher-variables").innerHTML = `
         <div class="card-text">
@@ -243,125 +242,111 @@
                         <input class="form-control" readonly type="number" min="1" id="n-value" step="1"
                             value="17989001">
                     </div>
-        `
-        UpdateD();
-        UpdateCipher();
+        ` //add place to input p, q, e, d, n
+        UpdateD(); //update d value
     }
 
-    function UpdateD() {
-        document.getElementById("d-value").value = ""
-        const p = bigInt(document.getElementById("p-value").value)
+    function UpdateD() { //calculate d value
+        document.getElementById("d-value").value = "" //clear d
+        const p = bigInt(document.getElementById("p-value").value) //get p,q,e
         const q = bigInt(document.getElementById("q-value").value)
         const e = bigInt(document.getElementById("e-value").value)
 
-        if (!p || !q || !e) return;
+        if (!p || !q || !e) return; //if no p, q, e
 
-        const num = p.prev().multiply(q.prev());
+        const num = p.prev().multiply(q.prev()); //calculate thi of n
 
-        document.getElementById("n-value").value = p.multiply(q).toString();
-        document.getElementById("d-value").value = e.modInv(num).toString();
+        document.getElementById("n-value").value = p.multiply(q).toString(); //set n to p * q
+        document.getElementById("d-value").value = e.modInv(num).toString(); //set d to inverse of e mod thi of n
 
-        UpdateCipher();
+        UpdateCipher(); //update cipher
     }
 
-    function Cipher() {
-
-    }
-
-    function DeCipher() {
-
-    }
-
-    function UpdateCipher() {
+    function UpdateCipher() { //update cipher
         console.clear();
-        let LeftText = document.getElementById("left-box-text").value
-        const RightTextBox = document.getElementById("right-box-text")
-        RightTextBox.value = "";
-        const n = bigInt(document.getElementById("n-value").value)
+        let LeftText = document.getElementById("left-box-text").value //get left text
+        const RightTextBox = document.getElementById("right-box-text") //get right text
+        RightTextBox.value = ""; //clear right text box
+        const n = bigInt(document.getElementById("n-value").value) //get n value
 
-        if (Encrypting) {
-            const e = bigInt(document.getElementById("e-value").value)
+        if (Encrypting) { //encrypting
+            const e = bigInt(document.getElementById("e-value").value) //get e value
 
-            const reg = new RegExp(/[^a-z]/, "gi")
+            const reg = new RegExp(/[^a-z]/, "gi") //remove non latin chars
             LeftText = LeftText.replace(reg, "")
 
+            if (!LeftText) return; //stop if no text
+            else if (!e) return RightTextBox.value = "ERROR: Invalid e value" //no e
+            else if (!n) return RightTextBox.value = "ERROR: Invalid n value" //no n
 
-            if (!LeftText) return;
-            else if (!e) return RightTextBox.value = "ERROR: Invalid e value"
-            else if (!n) return RightTextBox.value = "ERROR: Invalid n value"
- 
-            let NumberString = "";
-            for (let i = 0; i < LeftText.length; i++) {
-                const legacy_string = NumberString;
-                NumberString += LetterNums[LeftText[i].toLowerCase()]
-                if (bigInt(NumberString).greater(n)) {
-                    NumberString = LetterNums[LeftText[i].toLowerCase()];
-                    console.log(legacy_string)
-                    RightTextBox.value += bigInt(legacy_string).modPow(e, n) + "\n";
+            let NumberString = ""; //string
+            for (let i = 0; i < LeftText.length; i++) { //go through string
+                const legacy_string = NumberString; //string before adding one more char
+                NumberString += LetterNums[LeftText[i].toLowerCase()] //add num for the character
+                if (bigInt(NumberString).greater(n)) { //if its greater than n
+                    NumberString = LetterNums[LeftText[i].toLowerCase()]; //reset number string to the current num
+                    RightTextBox.value += bigInt(legacy_string).modPow(e, n) +
+                    "\n"; //take the old numbner to the power of e, mod n
                 }
             }
-            if (NumberString.length > 0) {
-                console.log(NumberString)
-                RightTextBox.value += bigInt(NumberString).modPow(e, n);
-
-                NumberString = "";
+            if (NumberString.length > 0) { //if the string still has something
+                RightTextBox.value += bigInt(NumberString).modPow(e, n); //take it to e mod n
+                NumberString = ""; //clear string
             }
+        } else { //decrypting
+            const d = bigInt(document.getElementById("d-value").value) //get d value
+            if (!LeftText) return; //no text
+            else if (!d) return RightTextBox.value = "ERROR: Invalid d value" //no d
+            else if (!n) return RightTextBox.value = "ERROR: Invalid n value" //no n
 
-        } else {
-            const d = bigInt(document.getElementById("d-value").value)
-            if (!LeftText) return;
-            else if (!d) return RightTextBox.value = "ERROR: Invalid d value"
-            else if (!n) return RightTextBox.value = "ERROR: Invalid n value"
+            const nums = LeftText.split("\n"); //get each num into array split by new line
 
-            const nums = LeftText.split("\n");
+            let LeftOverNum = ""; //left over is non
 
-            let LeftOverNum = "";
-
-            for (let i = 0; i < nums.length; i++) {
-                if (!parseInt(nums[i])) {
-                    RightTextBox.value = "ERROR: Invalid number";
+            for (let i = 0; i < nums.length; i++) { //loop through nums
+                if (!parseInt(nums[i])) { //if not a num
+                    RightTextBox.value = "ERROR: Invalid number"; //stop
                     return;
                 }
-                const BigNum = bigInt(nums[i]);
-                const AlphaNums = BigNum.modPow(d, n).toString();
+                const BigNum = bigInt(nums[i]); //convert to big num
 
-                const parsedNums = parseAlphaNums(LeftOverNum + AlphaNums);
+                const AlphaNums = BigNum.modPow(d, n).toString(); //take num to power of d, mod n
+
+                const parsedNums = parseAlphaNums(LeftOverNum + AlphaNums); //parse it
                 console.log(parsedNums)
-                LeftOverNum = parsedNums.leftovernum
-                RightTextBox.value += parsedNums.decryption;
+
+                LeftOverNum = parsedNums.leftovernum //set left over to what it is
+                RightTextBox.value += parsedNums.decryption; //add to right text box
             }
         }
 
     }
 
-    function parseAlphaNums(Nums) {
-        let answer = {
+    function parseAlphaNums(Nums) { //parse num to alpha
+        let answer = { //store answer
             "decryption": "",
             "leftovernum": "",
             "Nums": Nums
         };
-        for (let i = 0; i < Nums.length; i += 2) {
-            if (!Nums[i+1]) break;
-            const AlphaIndex = parseInt(Nums[i] + Nums[i + 1]);
-            if (!AlphaIndex || AlphaIndex > alphabet.length) {
-                if (Nums[0] == "0") return {
+        for (let i = 0; i < Nums.length; i += 2) { //loop through each 2 nums
+            if (!Nums[i + 1]) break; //if the second is null stop looping
+            const AlphaIndex = parseInt(Nums[i] + Nums[i + 1]); //parse int the 2 nums
+            if (!AlphaIndex || AlphaIndex > alphabet.length) { //if above 26 or not a num
+                if (Nums[0] == "0") return { //if the first num is 0, quit
                     "decryption": "ERROR: Invalid number",
                     "leftovernum": "",
                     "Nums": Nums
                 };
-                answer = parseAlphaNums("0" + Nums)
+                answer = parseAlphaNums("0" + Nums) //add 0 to start and re rerun
                 return answer;
             }
-            answer.decryption += alphabet[AlphaIndex - 1]
+            answer.decryption += alphabet[AlphaIndex - 1] //add the letter to decryption
         }
 
-        if (Nums.length % 2 != 0) answer.leftovernum = Nums[Nums.length - 1]
+        if (Nums.length % 2 != 0) answer.leftovernum = Nums[Nums.length -
+            1] //if its odd number, add last num to leftover
 
         return answer;
-    }
-
-    function UpdateCipherReversed() {
-
     }
 </script>
 
