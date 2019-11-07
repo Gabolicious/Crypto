@@ -27,36 +27,36 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav mr-auto">
-                    <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
-                                Ciphers
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" href="../index.html">Home</a>
-                                <a class="dropdown-item" href="../caesar/">Caesar Cipher</a>
-                                <a class="dropdown-item" href="../affine/">Affine Cipher</a>
-                                <a class="dropdown-item" href="../codeword/">Codeword Cipher</a>
-        
-                                <a class="dropdown-item" href="../vigenere/">Vigenère Cipher</a>
-                                <a class="dropdown-item" href="../playfair/">Playfair Cipher</a>
-                                <a class="dropdown-item" href="../hill2/">Hill 2x2 Cipher</a>
-                                <a class="dropdown-item" href="../hill3/">Hill 3x3 Cipher</a>
-                                <a class="dropdown-item" href="../rsa/">RSA Cipher</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Ciphers
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="../index.html">Home</a>
+                        <a class="dropdown-item" href="../caesar/">Caesar Cipher</a>
+                        <a class="dropdown-item" href="../affine/">Affine Cipher</a>
+                        <a class="dropdown-item" href="../codeword/">Codeword Cipher</a>
 
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
-                                Other Pages
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <a class="dropdown-item" href="http://www.gabobabo.xyz/Cleanify">Cleanify</a>
-                                <a class="dropdown-item" href="http://www.gabobabo.xyz/Drivify/">Drivify</a>
-                                <a class="dropdown-item" href="http://www.gabobabo.xyz/names/">Names</a>
-                            </div>
-                        </li>
+                        <a class="dropdown-item" href="../vigenere/">Vigenère Cipher</a>
+                        <a class="dropdown-item" href="../playfair/">Playfair Cipher</a>
+                        <a class="dropdown-item" href="../hill2/">Hill 2x2 Cipher</a>
+                        <a class="dropdown-item" href="../hill3/">Hill 3x3 Cipher</a>
+                        <a class="dropdown-item" href="../rsa/">RSA Cipher</a>
+
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Other Pages
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="http://www.gabobabo.xyz/Cleanify">Cleanify</a>
+                        <a class="dropdown-item" href="http://www.gabobabo.xyz/Drivify/">Drivify</a>
+                        <a class="dropdown-item" href="http://www.gabobabo.xyz/names/">Names</a>
+                    </div>
+                </li>
 
             </ul>
             <span class="navbar-text">
@@ -68,8 +68,9 @@
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
             <h1 class="display-4">Codeword Cipher</h1>
-            <p class="lead">A monoalphabetic cipher that uses a codeword and starting letter to remake the alphabet. No math required</br>
-                
+            <p class="lead">A monoalphabetic cipher that uses a codeword and starting letter to remake the alphabet. No
+                math required</br>
+
             </p>
         </div>
     </div>
@@ -98,7 +99,8 @@
 
                     <div class="card-text">
                         <label for="codeword-value" class="col-form-label">Codeword:</label>
-                        <input class="form-control" type="text" oninput="UpdateInfo()" id="codeword-value" value="BAFFLEGAB">
+                        <input class="form-control" type="text" oninput="UpdateInfo()" id="codeword-value"
+                            value="BAFFLEGAB">
 
                         <label for="starting-value" class="col-form-label">Starting Letter:</label>
                         <input class="form-control" type="text" oninput="UpdateInfo()" id="starting-value" value="M">
@@ -126,113 +128,130 @@
     </div>
 </body>
 <script>
-    function mod(n, m) {
+    function mod(n, m) { //special mod that doesn't break
         return ((n % m) + m) % m;
     }
-    let Encrypting = true;
-    let Dictionary;
-    const alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
-    let NewAlphabet = []
-    $.getJSON("../dictionary.json", (data, textStatus, XHR) => {
-        Dictionary = data
+    let Encrypting = true; //set encrypting to true
+    const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
+        't', 'u', 'v', 'w', 'x', 'y', 'z'
+    ] //the alphabet...
+    let NewAlphabet = [] //array used to store alphabet with codeword
+
+    $.getJSON("../dictionary.json", (data, textStatus, XHR) => { //get dictionary
+        var Dictionary = data
     })
-    UpdateInfo();
-    UpdateCipher();
 
-    function Hack() {
-        let CipherText
-        if (Encrypting) CipherText = document.getElementById("right-box-text").value;
-        else CipherText = document.getElementById("left-box-text").value;
+    UpdateInfo(); //update info
+    UpdateCipher(); //update the cipher
 
-        if (!CipherText || !document.getElementById("codeword-value").value) return;
-        document.getElementById("table-hack").innerHTML = ""
+    function Hack() { //figure out the starting letter
+        if (Encrypting) var CipherText = document.getElementById("right-box-text").value; //get cipher text
+        else var CipherText = document.getElementById("left-box-text").value;
 
-        const table = document.createElement("TABLE")
+        if (!CipherText || !document.getElementById("codeword-value").value) return; //if no wordword or no cipher text
+        document.getElementById("table-hack").innerHTML = "" //clear table hack
+
+        const table = document.createElement("TABLE") //make new table
         table.className = "table table-hover table-sm"
 
-        const tbody = document.createElement("tbody")
+        const tbody = document.createElement("tbody") //make table body
 
-        for (let i = 0; i < 26; i++) {
-            const tr2 = document.createElement("tr")
+        for (let i = 0; i < 26; i++) { //go through all different starting letters
+            const tr2 = document.createElement("tr") //make table row
             tr2.className = "table-danger"
 
-            const th3 = document.createElement("th")
+            const th3 = document.createElement("th") //make table header
             th3.scope = "row";
             th3.innerHTML = alphabet[i].toUpperCase();
-            tr2.appendChild(th3)
 
-            const td = document.createElement("td")
-            UpdateInfo(alphabet[i].toUpperCase())
+            tr2.appendChild(th3) //append the header to row
+
+            const td = document.createElement("td") //make table description
+
+            UpdateInfo(alphabet[i].toUpperCase()) //set starting letter to the new one
+
             for (let j = 0; j < CipherText.length; j++) {
-                td.innerHTML += DeCipher(CipherText[j])
+                td.innerHTML += DeCipher(CipherText[j]) //decrypt
             }
-            const words = td.innerHTML.split(" ")
+
+            const words = td.innerHTML.split(" ") //get words
             let points = 0;
 
-            for (let j = 0; j < words.length; j++) {
-                if (Dictionary[words[j].toLowerCase()]) {
-                    points++;
+            for (let j = 0; j < words.length; j++) { //go through all words
+                if (Dictionary[words[j].toLowerCase()]) { //if its a word
+                    points++; //add points
                 }
             }
-            if (points == words.length) tr2.className = "table-success"
-            else if (points > 1) tr2.className = "table-warning"
-            tr2.appendChild(td)
-            tbody.appendChild(tr2)
+
+            if (points == words.length) tr2.className = "table-success" //if all words are english set to green
+            else if (points > 1) tr2.className = "table-warning" //if only some, set to yellow
+
+            tr2.appendChild(td) //add td to the row
+            tbody.appendChild(tr2) //add row to body
         }
-        table.appendChild(tbody)
-        document.getElementById("table-hack").appendChild(table)
+        table.appendChild(tbody) //add body to table
+        document.getElementById("table-hack").appendChild(table) //add table
     }
 
     function UpdateInfo(start) {
-        let codeword = document.getElementById("codeword-value").value
-        const starting = start || document.getElementById("starting-value").value
-        if (!codeword) {
-            NewAlphabet = []
+        let codeword = document.getElementById("codeword-value").value //get codeword
+        const starting = start || document.getElementById("starting-value")
+            .value //use provided variable, if nothing provided use the thing inputted
+        if (!codeword) { //if there isn't a codeword
+            NewAlphabet = [] //clear new alphabet
             if (Encrypting) {
-                document.getElementById("right-box-text").value = "ERROR: Invalid Codeword"
+                document.getElementById("right-box-text").value = "ERROR: Invalid Codeword" //change to error
             } else {
                 document.getElementById("left-box-text").value = "ERROR: Invalid Codeword"
             }
             return;
-        } else if (!starting) {
-            NewAlphabet = []
+        } else if (!starting) { //if no starting
+            NewAlphabet = [] //clear new alphabet
             if (Encrypting) {
-                document.getElementById("right-box-text").value = "ERROR: Invalid starting letter"
+                document.getElementById("right-box-text").value = "ERROR: Invalid starting letter" //change to error
             } else {
                 document.getElementById("left-box-text").value = "ERROR: Invalid starting letter"
             }
             return;
         }
-        const StartIndex = alphabet.indexOf(starting.toLowerCase())
-        if (StartIndex < 0) {
-            NewAlphabet = []
+
+        const StartIndex = alphabet.indexOf(starting.toLowerCase()) //get index of the starting letter
+
+        if (StartIndex < 0) { //if not in alphabet
+            NewAlphabet = [] //clear new alphabet
             if (Encrypting) {
-                document.getElementById("right-box-text").value = "ERROR: Invalid starting letter"
+                document.getElementById("right-box-text").value = "ERROR: Invalid starting letter" //add error
             } else {
                 document.getElementById("left-box-text").value = "ERROR: Invalid starting letter"
             }
             return;
         }
-        codeword = codeword.split("")
-        let UnusedLetters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
 
-        for (let i = 0; i < codeword.length; i++) {
-            if (UnusedLetters.indexOf(codeword[i].toLowerCase()) == -1) {
-                codeword.splice(i, 1);
-                i--;
-            } else {
-                UnusedLetters.splice(UnusedLetters.indexOf(codeword[i].toLowerCase()), 1)
+        codeword = codeword.split("") //split codeword into letters
+        let UnusedLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+            's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+        ] //all unused letters starts full
+
+        for (let i = 0; i < codeword.length; i++) { //go through all letters
+            if (UnusedLetters.indexOf(codeword[i].toLowerCase()) == -1) { //if the letter has been used already
+                codeword.splice(i, 1); //remove from codeword
+                i--; //repeat index
+            } else { //not used already
+                UnusedLetters.splice(UnusedLetters.indexOf(codeword[i].toLowerCase()),
+                    1) //remove letter from unused letter array
             }
         }
 
-        for (let i = 0; i < 26; i++) {
-            if (i < codeword.length) {
-                NewAlphabet[(StartIndex + i) % 26] = codeword[i].toLowerCase();
-            } else {
-                NewAlphabet[(StartIndex + i) % 26] = UnusedLetters[i - codeword.length]
+        for (let i = 0; i < 26; i++) { //go through all letters
+            if (i < codeword.length) { //if still in codeword length
+                NewAlphabet[(StartIndex + i) % 26] = codeword[i].toLowerCase(); //set alphabet index to codeword letter
+            } else { //after end of codeword
+                NewAlphabet[(StartIndex + i) % 26] = UnusedLetters[i - codeword
+                    .length] //set alpha index to unused letters
             }
         }
-        if (!start) UpdateCipher()
+
+        if (!start) UpdateCipher() //update cipher if variable isn't provided
     }
 
     function CopyFunction(ID) {
@@ -247,64 +266,66 @@
         document.execCommand("copy");
     }
 
-    function BeginEncrypt() {
-        if (Encrypting) return;
-        Encrypting = true;
-        document.getElementById("left-box-status").innerHTML = "Plain Text"
+    function BeginEncrypt() { //start encrypting
+        if (Encrypting) return; //do nothing
+        Encrypting = true; //set to encrypting
+        document.getElementById("left-box-status").innerHTML = "Plain Text" //change titles
         document.getElementById("right-box-status").innerHTML = "Cipher Text"
         document.getElementById("left-box-text").value = document.getElementById("right-box-text").value
 
-        UpdateCipher();
+        UpdateCipher(); //update cipher
     }
 
-    function BeginDecrypt() {
-        if (!Encrypting) return;
-        Encrypting = false;
-        document.getElementById("left-box-status").innerHTML = "Cipher Text"
+    function BeginDecrypt() { //start decrypting
+        if (!Encrypting) return; //do nothing
+        Encrypting = false; //set to decrypting
+        document.getElementById("left-box-status").innerHTML = "Cipher Text" //change titles
         document.getElementById("right-box-status").innerHTML = "Plain Text"
         document.getElementById("left-box-text").value = document.getElementById("right-box-text").value
 
-        UpdateCipher();
+        UpdateCipher(); //update cipher
     }
 
-    function Cipher(character) {
-        if (!character.match(/[a-z]/i)) return character;
+    function Cipher(character) { //encrypt
+        if (!character.match(/[a-z]/i)) return character; //if special character
 
-        if (character == character.toUpperCase()) {
-            return NewAlphabet[alphabet.indexOf(character.toLowerCase())].toUpperCase()
+        if (character == character.toUpperCase()) { //if upper case
+            return NewAlphabet[alphabet.indexOf(character.toLowerCase())]
+            .toUpperCase() //go to new alphabet index of character in the regular alphabet, then set to upper case
         } else {
-            return NewAlphabet[alphabet.indexOf(character.toLowerCase())].toLowerCase()
-
+            return NewAlphabet[alphabet.indexOf(character.toLowerCase())]
+            .toLowerCase() //same as upper case but to lower case
         }
     }
 
-    function DeCipher(character) {
-        if (!character.match(/[a-z]/i)) return character;
+    function DeCipher(character) { //decrypt
+        if (!character.match(/[a-z]/i)) return character; //if special character
 
         if (character == character.toUpperCase()) {
-            return alphabet[NewAlphabet.indexOf(character.toLowerCase())].toUpperCase()
+            return alphabet[NewAlphabet.indexOf(character.toLowerCase())]
+            .toUpperCase() //go to alphabet index of character in new alphabet
         } else {
             return alphabet[NewAlphabet.indexOf(character.toLowerCase())].toLowerCase()
 
         }
     }
 
-    function UpdateCipher() {
-        document.getElementById("table-hack").innerHTML = ""
+    function UpdateCipher() { //update the cipher
+        document.getElementById("table-hack").innerHTML = "" //clear table hack
 
-        const LeftText = document.getElementById("left-box-text").value
-        const RightTextBox = document.getElementById("right-box-text")
-        if (NewAlphabet == [] || !NewAlphabet || NewAlphabet.length == 0) return;
+        const LeftText = document.getElementById("left-box-text").value //get left text
+        const RightTextBox = document.getElementById("right-box-text") //get right text box
+        if (NewAlphabet == [] || !NewAlphabet || NewAlphabet.length == 0) return; //if no new alphabet stop
 
-        RightTextBox.value = "";
+        RightTextBox.value = ""; //clear right text box
 
-        if (Encrypting) {
+        if (Encrypting) { //encrypt
             for (let i = 0; i < LeftText.length; i++) {
-                RightTextBox.value += Cipher(LeftText[i])
+                RightTextBox.value += Cipher(LeftText[i]) //cipher
             }
-        } else {
+        } else { //decrypting
             for (let i = 0; i < LeftText.length; i++) {
-                RightTextBox.value += DeCipher(LeftText[i])
+                RightTextBox.value += DeCipher(LeftText[i]) //decipher
             }
         }
 
