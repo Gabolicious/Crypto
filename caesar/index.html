@@ -126,57 +126,63 @@
     </div>
 </body>
 <script>
-        function mod(n, m) {
+    function mod(n, m) { //custom mod function that works with negatives
         return ((n % m) + m) % m;
     }
-    let Encrypting = true;
-    let Dictionary;
-    $.getJSON("../dictionary.json", (data, textStatus, XHR) => {
-        Dictionary = data
+
+    let Encrypting = true; //encrypting
+
+    $.getJSON("../dictionary.json", (data, textStatus, XHR) => { //get dictionary
+        var Dictionary = data
     })
 
     function Hack() {
-        let CipherText
-        if (Encrypting) CipherText = document.getElementById("right-box-text").value;
-        else CipherText = document.getElementById("left-box-text").value;
-        if (!CipherText) return;
-        document.getElementById("table-hack").innerHTML = ""
+        if (Encrypting) var CipherText = document.getElementById("right-box-text").value; //get cipher text
+        else var CipherText = document.getElementById("left-box-text").value;
 
-        const table = document.createElement("TABLE")
+        if (!CipherText) return; //stop if no cipher text
+
+        document.getElementById("table-hack").innerHTML = "" //clear table hack
+
+        const table = document.createElement("TABLE") //make a new table
         table.className = "table table-hover table-sm"
 
-        const tbody = document.createElement("tbody")
+        const tbody = document.createElement("tbody") //make table body
 
-        for (let i = 1; i <= 26; i++) {
-            const tr2 = document.createElement("tr")
+        for (let i = 1; i <= 26; i++) { //go through all add numbers
+            const tr2 = document.createElement("tr") //make table row
             tr2.className = "table-danger"
 
-            const th3 = document.createElement("th")
+            const th3 = document.createElement("th") //make table header
             th3.scope = "row";
             th3.innerHTML = i;
-            tr2.appendChild(th3)
 
-            const td = document.createElement("td")
-            for (let j = 0; j < CipherText.length; j++) {
+            tr2.appendChild(th3) //append table header to table row
+
+            const td = document.createElement("td") //make td
+            for (let j = 0; j < CipherText.length; j++) { //decipher
                 td.innerHTML += DeCipher(CipherText[j], i)
             }
 
-            const words = td.innerHTML.split(" ")
+            const words = td.innerHTML.split(" ") //get words
             let points = 0;
 
-            for (let j = 0; j < words.length; j++) {
-                if (Dictionary[words[j].toLowerCase()]) {
-                    points++;
+            for (let j = 0; j < words.length; j++) { //go through all words
+                if (Dictionary[words[j].toLowerCase()]) { //if its a word
+                    points++; //add points
                 }
             }
-            if (points == words.length) tr2.className = "table-success"
-            else if (points > 1) tr2.className = "table-warning"
-            tr2.appendChild(td)
-            tbody.appendChild(tr2)
-        }
-        table.appendChild(tbody)
 
-        document.getElementById("table-hack").appendChild(table)
+            if (points == words.length) tr2.className = "table-success" //all words are english, set to green
+            else if (points > 1) tr2.className = "table-warning" //at least 1 word is english, set to yellow
+
+            tr2.appendChild(td) //add td to table row
+            tbody.appendChild(tr2) //add table row to table body
+        } //next add
+
+        table.appendChild(tbody) //add table body to table
+
+        document.getElementById("table-hack").appendChild(table) //add table to table-hack
     }
 
     function CopyFunction(ID) {
@@ -192,61 +198,65 @@
     }
     UpdateCipher();
 
-    function BeginEncrypt() {
-        if (Encrypting) return;
-        Encrypting = true;
-        document.getElementById("left-box-status").innerHTML = "Plain Text"
+    function BeginEncrypt() { //start encrypting
+        if (Encrypting) return; //don't do anything
+        Encrypting = true; //set to encrypting
+        document.getElementById("left-box-status").innerHTML = "Plain Text" //update titles
         document.getElementById("right-box-status").innerHTML = "Cipher Text"
         document.getElementById("left-box-text").value = document.getElementById("right-box-text").value
 
-        UpdateCipher();
+        UpdateCipher(); //update cipher
     }
 
-    function BeginDecrypt() {
-        if (!Encrypting) return;
-        Encrypting = false;
-        document.getElementById("left-box-status").innerHTML = "Cipher Text"
+    function BeginDecrypt() { //start decrypting
+        if (!Encrypting) return; //don't do anything
+        Encrypting = false; //set to decrypting
+        document.getElementById("left-box-status").innerHTML = "Cipher Text" //update titles
         document.getElementById("right-box-status").innerHTML = "Plain Text"
         document.getElementById("left-box-text").value = document.getElementById("right-box-text").value
 
-        UpdateCipher();
+        UpdateCipher(); //update cipher
     }
 
-    function Cipher(character, step) {
-        if (!character.match(/[a-z]/i)) return character;
-        const CharCode = character.charCodeAt(0);
-        const Start = (character == character.toUpperCase()) ? "A".charCodeAt(0) : "a".charCodeAt(0);
-        return String.fromCharCode((((CharCode + step) - Start) % 26) + Start)
+    function Cipher(character, step) { //encrypt
+        if (!character.match(/[a-z]/i)) return character; //don't do anything if its not a through z
+        const CharCode = character.charCodeAt(0); //get the ascii value
+        const Start = (character == character.toUpperCase()) ? "A".charCodeAt(0) : "a".charCodeAt(
+        0); //get value needed to make a = 0
+        return String.fromCharCode((((CharCode + step) - Start) % 26) +
+            Start) //add step to character, make a = 0, mod 26, convert back to ascii
     }
 
-    function DeCipher(character, step) {
-        if (!character.match(/[a-z]/i)) return character;
-        const CharCode = character.charCodeAt(0);
-        const Start = (character == character.toUpperCase()) ? "A".charCodeAt(0) : "a".charCodeAt(0);
-        let AdjustedChar = CharCode - step;
-        if (AdjustedChar < Start) {
-            AdjustedChar += 26
+    function DeCipher(character, step) { //decrypt
+        if (!character.match(/[a-z]/i)) return character; //don't do anything if its not a through z
+        const CharCode = character.charCodeAt(0); //get ascii value
+        const Start = (character == character.toUpperCase()) ? "A".charCodeAt(0) : "a".charCodeAt(
+        0); //get value needed to make a  = 0
+        let AdjustedChar = CharCode - step; //subtract step
+        if (AdjustedChar < Start) { //if its lower than a
+            AdjustedChar += 26 //add 26
         }
-        return String.fromCharCode(AdjustedChar)
+        return String.fromCharCode(AdjustedChar) //return the char
     }
 
-    function UpdateCipher() {
-        const step = mod(parseInt(document.getElementById("step-value").value), 26)
-        if (step > 26 || step < 0) return RightTextBox.value = "ERROR: Invalid step value";
-        const LeftText = document.getElementById("left-box-text").value
-        const RightTextBox = document.getElementById("right-box-text")
-        RightTextBox.value = "";
-        if (Encrypting) {
+    function UpdateCipher() { //update the cipher
+        const step = mod(parseInt(document.getElementById("step-value").value), 26) //mod 26 inputted step value
+        if (step > 26 || step < 0) return RightTextBox.value =
+        "ERROR: Invalid step value"; //if somehow below 0 or above 26
+        const LeftText = document.getElementById("left-box-text").value //get the left box text
+        const RightTextBox = document.getElementById("right-box-text") //get right box
+        RightTextBox.value = ""; //clear right box
+        if (Encrypting) { //if encrypting
             for (let i = 0; i < LeftText.length; i++) {
-                RightTextBox.value += Cipher(LeftText[i], step)
+                RightTextBox.value += Cipher(LeftText[i], step) //encrypt
             }
-        } else {
+        } else { //if decrypting
             for (let i = 0; i < LeftText.length; i++) {
-                RightTextBox.value += DeCipher(LeftText[i], step)
+                RightTextBox.value += DeCipher(LeftText[i], step) //decrypt
             }
         }
 
-        document.getElementById("table-hack").innerHTML = ""
+        document.getElementById("table-hack").innerHTML = "" //clear table hack
     }
 </script>
 
